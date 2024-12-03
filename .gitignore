@@ -2,3 +2,5 @@ a.out
 *.o
 test_maps/
 fdf
+.obj
+.dep
