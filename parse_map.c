@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 04:13:28 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/03 07:08:07 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/03 21:47:30 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,37 @@ typedef struct s_map {
 
 t_map	init_map(char *file);
 
+void	map_free(int **map, size_t height);
+
+void	display_map(t_map map)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (i < map.height)
+	{
+		j = 0;
+		while (j < map.width)
+		{
+			ft_printf("%d ", map.map[i][j]);
+			j++;
+		}
+		ft_printf("\n");
+		i++;
+	}
+}
+
 int	main(int argc, char **argv)
 {
+	t_map	map;
+
 	if (argc == 2)
-		init_map(argv[1]);
+	{
+		map = init_map(argv[1]);
+		display_map(map);
+		map_free(map.map, map.height);
+	}
 	return (0);
 }
 
@@ -45,16 +72,17 @@ size_t	get_map_width(char *file)
 		exit(1);
 	line = get_next_line(fd);
 	if (!line)
-	{
-		close(fd);
-		exit(1);
-	}
+		return (close(fd), exit(1), -1);
 	i = 0;
 	nb_count = 0;
 	while (line[i])
 	{
-		if (line[i] == ' ' || line[i] == '\n')
+		if (ft_isdigit(line[i]) || line[i] == '-')
+		{
 			nb_count++;
+			while (line[i] && (ft_isdigit(line[i]) || line[i] == '-'))
+				i++;
+		}
 		i++;
 	}
 	return (free(line), close(fd), nb_count);
@@ -151,14 +179,15 @@ void	set_num_map(int fd, t_map *map)
 	while (line || !h)
 	{
 		line = get_next_line(fd);
-		if (set_num_segment(line, map->map[h]) == -1)
+		if (line && set_num_segment(line, map->map[h]) == -1)
 		{
 			map_free(map->map, h);
 			free(line);
 			close(fd);
 			exit(1);
 		}
-		free(line);
+		if (line)
+			free(line);
 		h++;
 	}
 }
@@ -177,11 +206,12 @@ void	set_map(char *file, t_map *map)
 	i = 0;
 	while (i < map->height)
 	{
-		map->map[i] = malloc(sizeof(int) * map->height);
+		map->map[i] = malloc(sizeof(int) * map->width);
 		if (!map->map[i])
 			return (map_free(map->map, i), close(fd), exit(1));
 		i++;
 	}
+	ft_printf("map h, w: %d %d\n", map->height, map->width);
 	set_num_map(fd, map);
 }
 
