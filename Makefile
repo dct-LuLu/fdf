@@ -35,7 +35,7 @@ vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
 # Sources
-SRCS		= main.c mlx_utils.c parse_map.c parse_map_utils.c vec.c
+SRCS		= main.c mlx_utils.c parse_map.c parse_map_utils.c vec.c str_utils.c utils.c
 
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))

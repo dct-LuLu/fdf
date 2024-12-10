@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/10 02:45:43 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/10 05:52:04 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,23 @@ typedef struct s_pixel {
 	int	color;
 }	t_pixel;
 
-//void	ft_mlx_batch_put(t_data *data, t_vec2 pos, t_vec2 size, int color);
+void	ft_mlx_batch_put(t_data *data, t_vec2 pos, t_vec2 size, int color);
 
-//void	ft_mlx_pixel_put(t_data *data, t_vec2 pos, int color);
+void	ft_mlx_pixel_put(t_data *data, t_vec2 pos, int color);
 
-//void	ft_mlx_line_put(t_data *data, t_vec2 a, t_vec2 b, int color);
+void	ft_mlx_line_put(t_data *data, t_vec2 a, t_vec2 b, int color);
 
-//int	argb(int a, int r, int g, int b);
+int	argb(int a, int r, int g, int b);
 
-//t_vec2	new_vec2(int x, int y);
+t_vec2	new_vec2(int x, int y);
 
-//t_vec3	new_vec3(int x, int y, int z);
+t_vec3	new_vec3(int x, int y, int z);
 
 typedef struct s_map {
 	size_t	width;
 	size_t	height;
+	t_vec2	offset;
+	int		fact;
 	t_pixel	**map;
 }	t_map;
 
@@ -72,5 +74,12 @@ int	check_open(char *file);
 char	*format_hex(char *str);
 
 int	hex_to_int(char *hex);
+
+
+void	set_fact(t_map *map, t_data img);
+
+void	set_offset(t_map *map, t_data img);
+
+t_vec2	iso(t_vec3 point);
 
 #endif

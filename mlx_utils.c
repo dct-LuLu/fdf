@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/05 15:22:06 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/10 06:02:57 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_mlx_pixel_put(t_data *data, t_vec2 pos, int color)
 {
 	int	offset;
 
-	if (pos.x >= 0 && pos.x <= 2000 && pos.y >= 0 && pos.y <= 2000)
+	if (pos.x >= 0 && pos.x < data->width && pos.y >= 0 && pos.y < data->height)
 	{
 		offset = ((pos.y * data->line_len) + (pos.x * data->byte_depth));
 		*(unsigned int*)(data->addr + offset) = color;

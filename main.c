@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/06 14:10:12 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/10 06:01:16 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,44 +41,50 @@ t_vec3	get_point_cords(t_map map, int x, int y)
 
 	point.x = x;
 	point.y = y;
-	point.z = map.map[y][x];
+	point.z = map.map[y][x].z;
 	return (point);
 }
 
-t_vec3	fac(t_vec3 p, int fac)
+t_vec3	fac(t_vec3 p, int fact)
 {
-	p.x *= fac;
-	p.x += 800;
-	p.y *= fac;
-	p.z *= 2;
+	p.x *= fact;
+	p.y *= fact;
+	p.z *= 1;
 	return (p);
 }
 
-void	draw_segments(t_data img, t_map map, int x, int y)
+void	center(t_vec2 *p, t_map map)
+{
+	p->x += map.offset.x;
+	p->y += map.offset.y;
+}
+
+void	draw_segments(t_data img, t_map map, size_t x, size_t y)
 {
 	t_vec2	p;
 	t_vec2	p1;
 	t_vec2	p2;
-	int		fact;
 
-	fact = 8;
-	p = iso(fac(get_point_cords(map, x, y), fact));
+	p = iso(fac(get_point_cords(map, x, y), map.fact));
+	center(&p, map);
 	if (x + 1 < map.width)
 	{
-		p1 = iso(fac(get_point_cords(map, x + 1, y), fact));
+		p1 = iso(fac(get_point_cords(map, x + 1, y), map.fact));
+		center(&p1, map);
 		ft_mlx_line_put(&img, p, p1, argb(0, 255, 0, 0));
 	}
 	if (y + 1 < map.height)
 	{
-		p2 = iso(fac(get_point_cords(map, x, y + 1), fact));
+		p2 = iso(fac(get_point_cords(map, x, y + 1), map.fact));
+		center(&p2, map);
 		ft_mlx_line_put(&img, p, p2, argb(0, 255, 0, 0));
 	}
 }
 
 void	draw_map(t_data img, t_map map)
 {
-	int	y;
-	int	x;
+	size_t	y;
+	size_t	x;
 	//t_vec3	pos;
 
 	y = 0;
@@ -114,8 +120,11 @@ int	main(int argc, char **argv)
 			exit(1);
 		win = mlx_new_window(mlx, width, height, "feur");
 		img = init_img(mlx, width, height);
-	
+		set_fact(&map, img);
+		set_offset(&map, img);	
 		draw_map(img, map);
+		ft_mlx_line_put(&img, new_vec2(0, 0), new_vec2(img.width, img.height), argb(0, 0, 255, 0));
+		ft_mlx_line_put(&img, new_vec2(0, img.height), new_vec2(img.width, 0), argb(0, 0, 255, 0));
 		mlx_put_image_to_window(mlx, win, img.img, 0, 0);
 		//mlx_destroy_image(mlx, img.img);
 
