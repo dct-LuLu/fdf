@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 04:13:28 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/03 22:55:19 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/10 03:13:07 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	set_map(char *file, t_map *map); 
+static void	populate_map(int fd, t_map *map);
 
 /*
 	Function that sets all the data for the map by """parsing""" it.
@@ -21,35 +21,141 @@ static void	set_map(char *file, t_map *map);
 t_map	init_map(char *file)
 {
 	t_map	map;
+	int		fd;
 
-	map.width = get_map_width(file);
+	fd = check_open(file);
+	map.width = get_map_width(fd);
 	if (!map.width)
 		exit(1);
-	map.height = get_map_height(file);
+	fd = check_open(file);
+	map.height = get_map_height(fd);
 	if (!map.height)
 		exit(1);
-	set_map(file, &map);
+	fd = check_open(file);
+	populate_map(fd, &map);
 	return (map);
 }
 
 /*
-// TEMPORARY !!!!!!!!!!!!!!!!!!
-static void	display_map(t_map map)
+	Function that takes as argument a string that can either be: 
+	"465,0x464FD" or "465"
+	Will determine if the pixel contain the info for both the z 
+	and the color or not.
+	And will assign and parse the corresponding values.
+*/
+static t_pixel	get_pixel(char *val)
 {
-	size_t	i;
-	size_t	j;
+	t_pixel	pixel;
+	char	**split;
 
-	i = 0;
-	while (i < map.height)
+	pixel.z = 0;
+	pixel.color = 0;
+	if (!is_in(val, ','))
+		pixel.z = ratoi(val);
+	else
 	{
-		j = 0;
-		while (j < map.width)
+		split = ft_split(val, ',');
+		if (split && split[0] && split[1])
 		{
-			ft_printf("%d ", map.map[i][j]);
-			j++;
+			pixel.z = ratoi(split[0]);
+			pixel.color = hex_to_int(format_hex(split[1]));
 		}
-		ft_printf("\n");
-		i++;
+		free_strr(split);
+	}
+	return (pixel);
+}
+
+/*
+	Function that takes a line of pixels as a string and will
+	use them to populate the map.
+	If error, cleans all and exit.
+*/
+static void	set_pixel_line(int fd, t_map *map, char *line, int y)
+{
+	size_t	x;
+	char	**pixels;
+
+	x = 0;
+	pixels = ft_split(line, ' ');
+	if (!pixels)
+	{
+		close(fd);
+		free(line);
+		free_map(map->map, y);
+		exit(1);
+	}
+	while (x < map->width)
+	{
+		map->map[y][x] = get_pixel(pixels[x]);
+		x++;
+	}
+	free_strr(pixels);
+}
+
+/*
+	Function that will parse the full map and populate
+	each pixel values.
+*/
+static void	set_pixel_map(int fd, t_map *map)
+{
+	size_t	y;
+	char	*line;
+
+	y = 0;
+	while (y < map->height)
+	{
+		line = get_next_line(fd);
+		if (line)
+			set_pixel_line(fd, map, line, y);
+		free(line);
+		y++;
+	}
+}
+
+/*
+	Function that will, alloc and populate the map with
+	all the pixel values of the map file.
+*/
+static void	populate_map(int fd, t_map *map)
+{
+	size_t	y;
+
+	map->map = malloc(sizeof(t_pixel *) * map->height);
+	if (!map->map)
+		return (close(fd), exit(1));
+	y = 0;
+	while (y < map->height)
+	{
+		map->map[y] = malloc(sizeof(t_pixel) * map->width);
+		if (!map->map[y])
+			return (free_map(map->map, y), close(fd), exit(1));
+		y++;
+	}
+	set_pixel_map(fd, map);
+	close(fd);
+}
+
+/*
+#include <stdio.h>
+static void	print_map(t_map map)
+{
+	size_t	x;
+	size_t	y;
+
+	y = 0;
+	while (y < map.height)
+	{
+		x = 0;
+		while (x < map.width)
+		{
+			if (map.map[y][x].color)
+				printf("%d,%X ", map.map[y][x].z, map.map[y][x].color);
+			else
+				printf("%d ", map.map[y][x].z);
+			x++;
+		}
+		printf("\n");
+		y++;
 	}
 }
 
@@ -60,87 +166,9 @@ int	main(int argc, char **argv)
 	if (argc == 2)
 	{
 		map = init_map(argv[1]);
-		display_map(map);
-		map_free(map.map, map.height);
+		print_map(map);
+		free_map(map.map, map.height);
 	}
 	return (0);
 }
 */
-
-/*
-	Function that take in parameter a string, and returns as an int the
-	first number it uncounters, return -1 on error or unwanted value
-*/
-static int	set_num_segment(char *line, int *segment)
-{
-	size_t	num_len;
-	char	*str_num;
-	size_t	w;
-	size_t	i;
-
-	i = 0;
-	w = 0;
-	while (line[i])
-	{
-		if (ft_isdigit(line[i]) || (line[i] == '-'))
-		{
-			num_len = get_str_num_len(line + i);
-			if (num_len == 0)
-				return (-1);
-			str_num = ft_strndup(line + i, num_len);
-			if (!str_num)
-				return (-1);
-			segment[w] = ratoi(str_num);
-			i += num_len;
-			w++;
-			free(str_num);
-		}
-		i++;
-	}
-	return (0);
-}
-
-static void	set_num_map(int fd, t_map *map)
-{
-	char	*line;
-	size_t	h;
-
-	h = 0;
-	line = NULL;
-	while (line || !h)
-	{
-		line = get_next_line(fd);
-		if (line && set_num_segment(line, map->map[h]) == -1)
-		{
-			map_free(map->map, h);
-			free(line);
-			close(fd);
-			exit(1);
-		}
-		if (line)
-			free(line);
-		h++;
-	}
-}
-
-static void	set_map(char *file, t_map *map)
-{
-	int		fd;
-	size_t	i;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		exit(1);
-	map->map = malloc(sizeof(int *) * map->height);
-	if (!map->map)
-		return (close(fd), exit(1));
-	i = 0;
-	while (i < map->height)
-	{
-		map->map[i] = malloc(sizeof(int) * map->width);
-		if (!map->map[i])
-			return (map_free(map->map, i), close(fd), exit(1));
-		i++;
-	}
-	set_num_map(fd, map);
-}
