@@ -6,17 +6,19 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/10 06:01:16 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:55:19 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 #include "fdf.h"
 #include <math.h>
+#include <X11/X.h>
+#include <X11/keysym.h>
 
-t_data	init_img(void *mlx, int width, int height)
+t_img	init_img(void *mlx, int width, int height)
 {
-	t_data	img;
+	t_img	img;
 
 	img.img = mlx_new_image(mlx, width, height);
 	img.addr = mlx_get_data_addr(img.img, &img.byte_depth, &img.line_len, &img.endian);
@@ -59,7 +61,7 @@ void	center(t_vec2 *p, t_map map)
 	p->y += map.offset.y;
 }
 
-void	draw_segments(t_data img, t_map map, size_t x, size_t y)
+void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 {
 	t_vec2	p;
 	t_vec2	p1;
@@ -81,7 +83,7 @@ void	draw_segments(t_data img, t_map map, size_t x, size_t y)
 	}
 }
 
-void	draw_map(t_data img, t_map map)
+void	draw_map(t_img img, t_map map)
 {
 	size_t	y;
 	size_t	x;
@@ -100,35 +102,41 @@ void	draw_map(t_data img, t_map map)
 	}
 }
 
+int	kill(t_env *env)
+{
+	free_map(env->map.map, env->map.height);
+	mlx_destroy_image(env->mlx, env->img.img);
+	mlx_destroy_window(env->mlx, env->win);
+	mlx_destroy_display(env->mlx);
+	exit(0);
+	return (0);
+}
+
 #include <unistd.h>
 int	main(int argc, char **argv)
 {
-	void	*mlx;
-	void	*win;
-	t_data	img;
-	t_map	map;
+	t_env	env;
 	int		width;
 	int		height;
 
 	if (argc == 2)
 	{
-		width = 2000;
-		height = 2000;
-		map = init_map(argv[1]);
-		mlx = mlx_init();
-		if (!mlx) //clear map too
-			exit(1);
-		win = mlx_new_window(mlx, width, height, "feur");
-		img = init_img(mlx, width, height);
-		set_fact(&map, img);
-		set_offset(&map, img);	
-		draw_map(img, map);
-		ft_mlx_line_put(&img, new_vec2(0, 0), new_vec2(img.width, img.height), argb(0, 0, 255, 0));
-		ft_mlx_line_put(&img, new_vec2(0, img.height), new_vec2(img.width, 0), argb(0, 0, 255, 0));
-		mlx_put_image_to_window(mlx, win, img.img, 0, 0);
-		//mlx_destroy_image(mlx, img.img);
-
-		mlx_loop(mlx);
+		width = 1000;
+		height = 1000;
+		env.map = init_map(argv[1]);
+		env.mlx = mlx_init();
+		if (!env.mlx)
+			return (free_map(env.map.map, env.map.height), 1);
+		env.win = mlx_new_window(env.mlx, width, height, "fdf");
+		env.img = init_img(env.mlx, width, height);
+		set_fact(&env.map, env.img);
+		set_offset(&env.map, env.img);	
+		draw_map(env.img, env.map);
+		ft_mlx_line_put(&env.img, new_vec2(0, 0), new_vec2(env.img.width, env.img.height), argb(0, 0, 255, 0));
+		ft_mlx_line_put(&env.img, new_vec2(0, env.img.height), new_vec2(env.img.width, 0), argb(0, 0, 255, 0));
+		mlx_put_image_to_window(env.mlx, env.win, env.img.img, 0, 0);
+		mlx_hook(env.win, DestroyNotify, StructureNotifyMask, &kill, &env);
+		mlx_loop(env.mlx);
 	}
 	return (0);
 }

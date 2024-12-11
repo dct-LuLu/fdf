@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/10 05:52:04 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:48:30 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "libft.h"
 # include <math.h>
 
-typedef struct s_data {
+typedef struct s_img {
 	void	*img;
 	char	*addr;
 	int		byte_depth;
@@ -23,7 +23,7 @@ typedef struct s_data {
 	int		endian;
 	int		width;
 	int		height;
-}	t_data;
+}	t_img;
 
 typedef struct s_vec2 {
 	int	x;
@@ -41,11 +41,11 @@ typedef struct s_pixel {
 	int	color;
 }	t_pixel;
 
-void	ft_mlx_batch_put(t_data *data, t_vec2 pos, t_vec2 size, int color);
+void	ft_mlx_batch_put(t_img *data, t_vec2 pos, t_vec2 size, int color);
 
-void	ft_mlx_pixel_put(t_data *data, t_vec2 pos, int color);
+void	ft_mlx_pixel_put(t_img *data, t_vec2 pos, int color);
 
-void	ft_mlx_line_put(t_data *data, t_vec2 a, t_vec2 b, int color);
+void	ft_mlx_line_put(t_img *data, t_vec2 a, t_vec2 b, int color);
 
 int	argb(int a, int r, int g, int b);
 
@@ -60,6 +60,13 @@ typedef struct s_map {
 	int		fact;
 	t_pixel	**map;
 }	t_map;
+
+typedef struct s_env {
+	void	*mlx;
+	void	*win;
+	t_img	img;
+	t_map	map;
+}	t_env;
 
 size_t	get_map_width(int fd);
 
@@ -76,9 +83,9 @@ char	*format_hex(char *str);
 int	hex_to_int(char *hex);
 
 
-void	set_fact(t_map *map, t_data img);
+void	set_fact(t_map *map, t_img img);
 
-void	set_offset(t_map *map, t_data img);
+void	set_offset(t_map *map, t_img img);
 
 t_vec2	iso(t_vec3 point);
 

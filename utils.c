@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 02:17:22 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/10 05:53:50 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:30:48 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int	check_open(char *file)
 }
 
 
-void	set_fact(t_map *map, t_data img)
+void	set_fact(t_map *map, t_img img)
 {
 	map->fact = (img.width - (img.width / 3)) / map->width;
 }
 
-void	set_offset(t_map *map, t_data img)
+void	set_offset(t_map *map, t_img img)
 {
 	t_vec2	map_center;
 
