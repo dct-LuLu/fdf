@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/11 17:36:49 by jaubry--         ###   ########.fr        #
+#    Updated: 2024/12/11 21:48:55 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 SHELL := /bin/bash
@@ -94,8 +94,8 @@ re: fclean all
 debug:
 	@echo -e "$(YELLOW)$(BOLD)⚠ Building in debug mode...$(RESET)"
 	@$(MAKE) -s -C $(LIBFTDIR) debug
-	@$(MAKE) -s CC="cc -g -D DEBUG=1" -B $(OBJS)
-	@$(MAKE) -s CC="cc -g -D DEBUG=1" $(NAME)
+	@$(MAKE) -s CC="cc -g -D DEBUG=1 -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)" -B $(OBJS)
+	@$(MAKE) -s CC="cc -g -D DEBUG=1 -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)" $(NAME)
 	@echo -e "$(YELLOW)$(BOLD)✓ Debug build complete$(RESET)"
 
 help:

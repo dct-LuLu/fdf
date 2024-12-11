@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:03:34 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/10 03:13:48 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/11 22:35:24 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ int	hex_to_int(char *hex)
 	while (hex[i])
 	{
 		if ((hex[i] >= 'A') && (hex[i] <= 'F'))
-			num += (int)(hex[i] - 55) * pow(16, len - i - 1);
+			num += (hex[i] - 55) * pow(16, len - i - 1);
 		else if ((hex[i] >= '0') && (hex[i] <= '9'))
-			num += (int)(hex[i] - 48) * pow(16, len - i - 1);
+			num += (hex[i] - 48) * pow(16, len - i - 1);
 		i++;
 	}
 	return (num);
