@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/11 15:57:16 by jaubry--         ###   ########.fr        #
+#    Updated: 2024/12/11 17:36:49 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 SHELL := /bin/bash
@@ -34,7 +34,10 @@ NAME		= fdf
 LIBFT		= $(LIBFTDIR)/libft.a
 
 # Compiler and flags
-CC			= cc
+WIDTH		= 1000
+HEIGHT		= 1000
+
+CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
@@ -48,7 +51,9 @@ vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
 # Sources
-SRCS		= main.c mlx_utils.c parse_map.c parse_map_utils.c vec.c str_utils.c utils.c
+SRCS		= main.c mlx_utils.c parse_map.c parse_map_utils.c vec.c \
+			  str_utils.c utils.c math_utils.c map_utils.c mlx_hooks.c \
+			  draw_utils.c
 
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
@@ -86,12 +91,11 @@ fclean:
 
 re: fclean all
 
-debug: CFLAGS += -g3
 debug:
 	@echo -e "$(YELLOW)$(BOLD)⚠ Building in debug mode...$(RESET)"
 	@$(MAKE) -s -C $(LIBFTDIR) debug
-	@$(MAKE) -s -B $(OBJS)
-	@$(MAKE) -s $(NAME)
+	@$(MAKE) -s CC="cc -g -D DEBUG=1" -B $(OBJS)
+	@$(MAKE) -s CC="cc -g -D DEBUG=1" $(NAME)
 	@echo -e "$(YELLOW)$(BOLD)✓ Debug build complete$(RESET)"
 
 help:

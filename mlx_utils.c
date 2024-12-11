@@ -12,6 +12,9 @@
 
 #include "fdf.h"
 
+/*
+	Function that draws a square.
+*/
 void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
 	int				x;
@@ -21,7 +24,6 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 
 	offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
 	pixels = (unsigned int *)(img->addr + offset);
-
 	x = 0;
 	while (x < size.x)
 	{
@@ -35,6 +37,10 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 	}
 }
 
+/*
+	Function that draws a pixel directly on the address of the img
+	on the memory.
+*/
 void	ft_mlx_pixel_put(t_img *img, t_vec2 pos, int color)
 {
 	int	offset;
@@ -42,58 +48,62 @@ void	ft_mlx_pixel_put(t_img *img, t_vec2 pos, int color)
 	if (pos.x >= 0 && pos.x < img->width && pos.y >= 0 && pos.y < img->height)
 	{
 		offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
-		*(unsigned int*)(img->addr + offset) = color;
+		*(unsigned int *)(img->addr + offset) = color;
 	}
 }
 
-int	abs(int x)
+/*
+	Function for line_put logic, to increment the current pixel draw pos.
+*/
+static void	incr_line(int *pos, int *err, int d, int s)
 {
-	if (x < 0)
-		return (-x);
-	return (x);
+	*err += d;
+	*pos += s;
 }
 
+/*
+	Function that draws a line from point a to point b using a color.
+*/
 void	ft_mlx_line_put(t_img *img, t_vec2 a, t_vec2 b, int color)
 {
-	int	dx;
-	int	dy;
-	int	sx;
-	int	sy;
-	int	err;
-	int	e2;
+	t_line	line;
 
-	dx = abs(b.x - a.x);
-	dy = -abs(b.y - a.y);
-	sx = (b.x > a.x) - (b.x < a.x);
-	sy = (b.y > a.y) - (b.y < a.y);
-	err = dx + dy;
-
-	while (1)
+	line = get_line_data(a, b);
+	while (true)
 	{
-		if (a.x >= 0 && a.x <= img->width && a.y >= 0 && a.y <= img->height)
+		if ((a.x >= 0) && (a.x <= img->width)
+			&& (a.y >= 0) && (a.y <= img->height))
 			ft_mlx_pixel_put(img, a, color);
 		if ((a.x == b.x) && (a.y == b.y))
 			break ;
-		e2 = err * 2;
-		
-		if (e2 >= dy)
+		line.e2 = line.err * 2;
+		if (line.e2 >= line.dy)
 		{
 			if (a.x == b.x)
 				break ;
-			err += dy;
-			a.x += sx;
+			incr_line(&a.x, &line.err, line.dy, line.sx);
 		}
-		if (e2 <= dx)
+		if (line.e2 <= line.dx)
 		{
 			if (a.y == b.y)
 				break ;
-			err += dx;
-			a.y += sy;
+			incr_line(&a.y, &line.err, line.dx, line.sy);
 		}
 	}
 }
 
-int	argb(int a, int r, int g, int b)
+/*
+	Function to init image with given size, will init it's metadata too.
+*/
+t_img	init_img(void *mlx, int width, int height)
 {
-	return (a << 24 | r << 16 | g << 8 | b);
+	t_img	img;
+
+	img.img = mlx_new_image(mlx, width, height);
+	img.addr = mlx_get_data_addr(img.img, &img.byte_depth,
+			&img.line_len, &img.endian);
+	img.byte_depth /= 8;
+	img.width = width;
+	img.height = height;
+	return (img);
 }

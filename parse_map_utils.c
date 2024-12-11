@@ -51,19 +51,3 @@ size_t	get_map_height(int fd)
 	}
 	return (close(fd), lines);
 }
-
-/*
-	Function to free the 2d array of ints (the map)
-*/
-void	free_map(t_pixel **map, size_t height)
-{
-	size_t	h;
-
-	h = 0;
-	while (h < height)
-	{
-		free(map[h]);
-		h++;
-	}
-	free(map);
-}
