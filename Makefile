@@ -1,3 +1,16 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
+#    Updated: 2024/12/11 15:57:16 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+SHELL := /bin/bash
+
 # Colors and formatting
 GREEN		= \e[1;32m
 BLUE		= \e[1;34m
@@ -44,7 +57,7 @@ all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
-	$(CF) $^ $(LFLAGS) -o $@
+	@$(CF) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
 
 $(LIBFT):
@@ -53,7 +66,7 @@ $(LIBFT):
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	@echo -e "$(PURPLE)➜ Compiling $(UNDERLINE)$<$(RESET)"
-	$(CF) -c $< -o $@
+	@$(CF) -c $< -o $@
 
 $(OBJDIR) $(DEPDIR):
 	@echo -e "$(BLUE)Creating directory $(UNDERLINE)$@$(RESET)"
