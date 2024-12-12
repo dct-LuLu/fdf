@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 18:13:51 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/13 00:40:19 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ typedef struct s_map
 	size_t	width;
 	size_t	height;
 	t_vec2	offset;
-	int		fact;
+	int		space;
+	int		zfac;
+	int		min;
+	int		max;
 	t_pixel	**map;
 }	t_map;
 
@@ -97,12 +100,13 @@ void	ft_mlx_pixel_put(t_img *data, t_vec2 pos, int color);
 void	ft_mlx_line_put(t_img *data, t_vec2 a, t_vec2 b, int color);
 void	ft_mlx_batch_put(t_img *data, t_vec2 pos, t_vec2 size, int color);
 
-void	draw_map(t_img img, t_map map);
+void	draw_map(t_env env);
 void	draw_segments(t_img img, t_map map, size_t x, size_t y);
 
 t_map	init_map(char *file);
 size_t	get_map_width(int fd);
 size_t	get_map_height(int fd);
+void	set_min_max_map(t_map *map);
 
 t_vec3	get_point_cords(t_map map, int x, int y);
 void	free_map(t_pixel **map, size_t height);
@@ -111,12 +115,13 @@ char	*format_hex(char *str);
 int		hex_to_int(char *hex);
 
 int		check_open(char *file);
-void	set_fact(t_map *map, t_img img);
-void	set_offset(t_map *map, t_img img);
+void	set_space(t_map *map);
+void	set_offset(t_map *map);
 
-t_vec3	fac(t_vec3 p, int fact);
+t_vec3	space(t_vec3 p, t_map map);
 void	center(t_vec2 *p, t_map map);
 
 int		kill(t_env *env);
+void	kill_img(void *mlx, t_img *img);
 
 #endif
