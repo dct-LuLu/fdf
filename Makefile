@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/11 21:48:55 by jaubry--         ###   ########.fr        #
+#    Updated: 2024/12/12 02:13:28 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 SHELL := /bin/bash
@@ -22,10 +22,10 @@ BOLD		= \e[1m
 RESET		= \e[0m
 
 # Directories
-SRCDIR		= .
+SRCDIR		= Fdf/src
 OBJDIR		= .obj
 DEPDIR		= .dep
-INCDIR		= .
+INCDIR		= Fdf/include
 LIBFTDIR	= libft
 MLXDIR		= minilibx-linux
 

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 02:17:22 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 22:30:33 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/12 02:14:58 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	set_offset(t_map *map, t_img img)
 
 	map_center = iso(new_vec3(map->width * map->fact,
 				map->height * map->fact, 0));
-	ft_printf("%d %d\n", map_center.x, map_center.y);
 	map->offset.x = (img.width / 2) - (map_center.x / 2);
 	map->offset.y = (img.height / 2) - (map_center.y / 2);
 }
