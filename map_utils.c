@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:31:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 22:31:17 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:48:30 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ t_vec3	get_point_cords(t_map map, int x, int y)
 	point.z = map.map[y][x].z;
 	return (point);
 }
-
