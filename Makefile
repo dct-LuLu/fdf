@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/12 02:13:28 by jaubry--         ###   ########.fr        #
+#    Updated: 2024/12/12 03:44:56 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 SHELL := /bin/bash
@@ -60,7 +60,7 @@ DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
 
 all: $(LIBFT) $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) $(LIBFT) | mlx
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
 	@$(CF) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
@@ -68,6 +68,10 @@ $(NAME): $(OBJS) $(LIBFT)
 $(LIBFT):
 	@echo -e "$(PURPLE)➜ Building $(UNDERLINE)libft$(RESET)"
 	@$(MAKE) -s -C $(LIBFTDIR)
+
+mlx:
+	@echo -e "$(PURPLE)-> Building $(UNDERLINE)minilibx$(RESET)"
+	@$(MAKE) -s -C $(MLXDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	@echo -e "$(PURPLE)➜ Compiling $(UNDERLINE)$<$(RESET)"
@@ -108,5 +112,5 @@ help:
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re debug help
+.PHONY: all clean fclean re debug help mlx
 

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 18:13:51 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/12 03:42:27 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,6 @@ t_vec3	fac(t_vec3 p, int fact);
 void	center(t_vec2 *p, t_map map);
 
 int		kill(t_env *env);
+int on_keypress(int keysym, t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 18:16:57 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/12 03:41:49 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(int argc, char **argv)
 		debug_draw(env);
 		mlx_put_image_to_window(env.mlx, env.win, env.img.img, 0, 0);
 		mlx_hook(env.win, DestroyNotify, StructureNotifyMask, &kill, &env);
+		mlx_hook(env.win, KeyRelease, KeyReleaseMask, &on_keypress, &env);
 		mlx_loop(env.mlx);
 	}
 	return (0);
