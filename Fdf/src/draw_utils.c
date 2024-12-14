@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:10:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 18:10:15 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:43:42 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,37 +22,43 @@ void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 	t_vec2	p1;
 	t_vec2	p2;
 
-	p = iso(fac(get_point_cords(map, x, y), map.fact));
+	p = iso(space(get_point_cords(map, x, y), map));
 	center(&p, map);
 	if (x + 1 < map.width)
 	{
-		p1 = iso(fac(get_point_cords(map, x + 1, y), map.fact));
+		p1 = iso(space(get_point_cords(map, x + 1, y), map));
 		center(&p1, map);
-		ft_mlx_line_put(&img, p, p1, argb(0, 255, 0, 0));
+		if (map.map[y][x].color && map.map[y][x + 1].color)
+			ft_mlx_line_put(&img, p, p1, map.map[y][x].color);
+		else
+			ft_mlx_line_put(&img, p, p1, argb(0, 255, 0, 0));
 	}
 	if (y + 1 < map.height)
 	{
-		p2 = iso(fac(get_point_cords(map, x, y + 1), map.fact));
+		p2 = iso(space(get_point_cords(map, x, y + 1), map));
 		center(&p2, map);
-		ft_mlx_line_put(&img, p, p2, argb(0, 255, 0, 0));
+		if (map.map[y][x].color && map.map[y + 1][x].color)
+			ft_mlx_line_put(&img, p, p2, map.map[y][x].color);
+		else
+			ft_mlx_line_put(&img, p, p2, argb(0, 255, 0, 0));
 	}
 }
 
 /*
 	Function that draws on the image the map.
 */
-void	draw_map(t_img img, t_map map)
+void	draw_map(t_env env)
 {
 	size_t	y;
 	size_t	x;
 
 	y = 0;
-	while (y < map.height)
+	while (y < env.map.height)
 	{
 		x = 0;
-		while (x < map.width)
+		while (x < env.map.width)
 		{
-			draw_segments(img, map, x, y);
+			draw_segments(env.img, env.map, x, y);
 			x++;
 		}
 		y++;

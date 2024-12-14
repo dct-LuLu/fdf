@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 22:40:19 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 22:33:06 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:43:53 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,27 @@ size_t	get_map_height(int fd)
 		free(line);
 	}
 	return (close(fd), lines);
+}
+
+void	set_min_max_map(t_map *map)
+{
+	size_t	x;
+	size_t	y;
+
+	map->min = 0;
+	map->max = 0;
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			if (map->min > map->map[y][x].z)
+				map->min = map->map[y][x].z;
+			if (map->max < map->map[y][x].z)
+				map->max = map->map[y][x].z;
+			x++;
+		}
+		y++;
+	}
 }

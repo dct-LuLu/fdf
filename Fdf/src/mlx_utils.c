@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 15:30:28 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:43:50 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,18 @@ t_img	init_img(void *mlx, int width, int height)
 	img.width = width;
 	img.height = height;
 	return (img);
+}
+
+void	kill_img(void *mlx, t_img *img)
+{
+	if (img->img)
+	{
+		mlx_destroy_image(mlx, img->img);
+		img->img = NULL;
+	}
+	if (img->addr)
+		img->addr = NULL;
+	img->byte_depth = 0;
+	img->width = 0;
+	img->height = 0;
 }

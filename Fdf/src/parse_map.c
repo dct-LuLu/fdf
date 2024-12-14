@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 04:13:28 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/10 03:13:07 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:43:55 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_map	init_map(char *file)
 		exit(1);
 	fd = check_open(file);
 	populate_map(fd, &map);
+	set_min_max_map(&map);
 	return (map);
 }
 
