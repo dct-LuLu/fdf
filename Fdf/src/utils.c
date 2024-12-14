@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 02:17:22 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:43:58 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/14 20:08:49 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,38 +28,32 @@ int	check_open(char *file)
 }
 
 /*
-	Function that compute the multiplying factor necessary for the map to be at
+	Function that compute:
+	- the multiplying factor necessary for the map to be at
 	a certain ration to be fully visible.
-*/
-void	set_space(t_map *map)
-{
-	map->space = (WIDTH - (WIDTH / 3)) / map->width;
-	if ((map->max - map->min) < 20)
-		map->zfac = 2;
-	else
-		map->zfac = 1;
-	ft_printf("feur:%d\n", map->space / 14);
-	ft_printf("max, min %d %d\n", map->max, map->min);
-}
-
-/*
-	Function that computes the offset of the center point of the map and the
+	- the offset of the center point of the map and the
 	center of the window.
+	- the mutltiplying factor for z-axis.
 */
-void	set_offset(t_map *map)
+void	set_arrange(t_map *map)
 {
 	t_vec2	map_center;
 
+	map->space = (WIDTH - (WIDTH / 3)) / map->width;
 	map_center = iso(new_vec3(map->width * map->space,
 				map->height * map->space, 0));
 	map->offset.x = (WIDTH / 2) - (map_center.x / 2);
 	map->offset.y = (HEIGHT / 2) - (map_center.y / 2);
+	if ((map->max - map->min) < 20)
+		map->zfac = 2;
+	else
+		map->zfac = 1;
 }
 
 /*
 	Function that applies the multiplying factor to the point cords
 */
-t_vec3	space(t_vec3 p, t_map map)
+t_vec3	arrange(t_vec3 p, t_map map)
 {
 	p.x *= map.space;
 	p.y *= map.space;

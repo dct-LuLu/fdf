@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:10:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:43:42 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/14 20:03:44 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 	t_vec2	p1;
 	t_vec2	p2;
 
-	p = iso(space(get_point_cords(map, x, y), map));
+	p = iso(arrange(get_point_cords(map, x, y), map));
 	center(&p, map);
 	if (x + 1 < map.width)
 	{
-		p1 = iso(space(get_point_cords(map, x + 1, y), map));
+		p1 = iso(arrange(get_point_cords(map, x + 1, y), map));
 		center(&p1, map);
 		if (map.map[y][x].color && map.map[y][x + 1].color)
 			ft_mlx_line_put(&img, p, p1, map.map[y][x].color);
@@ -35,7 +35,7 @@ void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 	}
 	if (y + 1 < map.height)
 	{
-		p2 = iso(space(get_point_cords(map, x, y + 1), map));
+		p2 = iso(arrange(get_point_cords(map, x, y + 1), map));
 		center(&p2, map);
 		if (map.map[y][x].color && map.map[y + 1][x].color)
 			ft_mlx_line_put(&img, p, p2, map.map[y][x].color);

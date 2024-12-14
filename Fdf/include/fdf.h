@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:43:03 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/14 20:09:05 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,14 +115,13 @@ char	*format_hex(char *str);
 int		hex_to_int(char *hex);
 
 int		check_open(char *file);
-void	set_space(t_map *map);
-void	set_offset(t_map *map);
+void	set_arrange(t_map *map);
 
-t_vec3	space(t_vec3 p, t_map map);
+t_vec3	arrange(t_vec3 p, t_map map);
 void	center(t_vec2 *p, t_map map);
 
 int		kill(t_env *env);
-int on_keypress(int keysym, t_env *env);
+int		on_keypress(int keysym, t_env *env);
 void	kill_img(void *mlx, t_img *img);
 
 #endif

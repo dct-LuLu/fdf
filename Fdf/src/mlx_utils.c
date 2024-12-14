@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:43:50 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/14 20:08:14 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /*
 	Function that draws a square.
 */
+/*
 void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
 	int				x;
@@ -36,6 +37,7 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 		x++;
 	}
 }
+*/
 
 /*
 	Function that draws a pixel directly on the address of the img

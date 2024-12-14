@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:32:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/12 03:46:14 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/14 20:07:31 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int	kill(t_env *env)
 	return (0);
 }
 
-int on_keypress(int keysym, t_env *env)
+int	on_keypress(int keysym, t_env *env)
 {
-	ft_printf("Pressed key: %d\n", keysym);
 	if (keysym == 65307)
 		kill(env);
 	return (0);
