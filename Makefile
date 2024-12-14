@@ -3,13 +3,26 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/12 03:44:56 by jaubry--         ###   ########.fr        #
+#    Updated: 2024/12/14 21:31:12 by jaubry--         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
+
 SHELL := /bin/bash
+
+ifeq ($(filter bonus sbonus,$(MAKECMDGOALS)),)
+    include Fdf/fdf.mk
+endif
+
+ifeq ($(MAKECMDGOALS), bonus)
+	include Fdf-bonus/bonus.mk
+endif
+
+ifeq ($(MAKECMDGOALS), sbonus)
+	include Fdf-sbonus/sbonus.mk
+endif
 
 # Colors and formatting
 GREEN		= \e[1;32m
@@ -22,15 +35,12 @@ BOLD		= \e[1m
 RESET		= \e[0m
 
 # Directories
-SRCDIR		= Fdf/src
 OBJDIR		= .obj
 DEPDIR		= .dep
-INCDIR		= Fdf/include
 LIBFTDIR	= libft
 MLXDIR		= minilibx-linux
 
 # Output
-NAME		= fdf
 LIBFT		= $(LIBFTDIR)/libft.a
 
 # Compiler and flags
@@ -45,25 +55,30 @@ LFLAGS		= -L$(MLXDIR) -lXext -lX11 -lm -lmlx
 CF			= $(CC) $(CFLAGS) $(IFLAGS) $(DFLAGS)
 
 # VPATH
-vpath %.c $(SRCDIR) $(LIBFTDIR)/$(SRCDIR)
-vpath %.h $(INCDIR) $(LIBFTDIR)/$(INCDIR) $(MLXDIR)
+vpath %.c $(LIBFTDIR)/$(SRCDIR)
+vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR)
 vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
-
-# Sources
-SRCS		= main.c mlx_utils.c parse_map.c parse_map_utils.c vec.c \
-			  str_utils.c utils.c math_utils.c map_utils.c mlx_hooks.c \
-			  draw_utils.c
 
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT) | mlx
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
-	@$(CF) $^ $(LFLAGS) -o $@
+	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
+
+bonus: $(OBJS) $(LIBFT) | mlx
+	@echo -e "$(BLUE)Creating program $(UNDERLINE)bonus$(RESET)$(BLUE)...$(RESET)"
+	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
+	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)bonus$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
+
+sbonus: $(OBJS) $(LIBFT) | mlx
+	@echo -e "$(BLUE)Creating program $(UNDERLINE)sbonus$(RESET)$(BLUE)...$(RESET)"
+	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
+	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)sbonus$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
 
 $(LIBFT):
 	@echo -e "$(PURPLE)➜ Building $(UNDERLINE)libft$(RESET)"
@@ -91,7 +106,7 @@ fclean:
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
 	@rm -rf $(OBJDIR) $(DEPDIR)
 	@echo -e "$(RED)Removing program $(UNDERLINE)$(NAME)$(RESET)"
-	@rm -f $(NAME)
+	@rm -f fdf bonus sbonus
 
 re: fclean all
 
