@@ -1,3 +1,5 @@
+NAME		= bonus
+
 DIR			= Fdf-bonus
 SRCDIR		= $(DIR)/src
 INCDIR		= $(DIR)/include

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 02:17:22 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 20:36:06 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/16 19:44:49 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,19 @@ void	set_arrange(t_map *map)
 {
 	t_vec2	map_center;
 
-	map->proj = &iso;
-	map->space = (WIDTH - (WIDTH / 3)) / map->width;
+	if (!map->proj)
+	{
+		map->proj = &iso;
+		map->space = (WIDTH - (WIDTH / 3)) / map->width;
+		if ((map->max - map->min) < 20)
+			map->zfac = 2;
+		else
+			map->zfac = 1;
+	}
 	map_center = map->proj(new_vec3(map->width * map->space,
 				map->height * map->space, 0));
-	map->offset.x = (WIDTH / 2) - (map_center.x / 2);
-	map->offset.y = (HEIGHT / 2) - (map_center.y / 2);
-	if ((map->max - map->min) < 20)
-		map->zfac = 2;
-	else
-		map->zfac = 1;
+	map->offset.x = (WIDTH / 2) - (map_center.x / 2) + map->pos.x;
+	map->offset.y = (HEIGHT / 2) - (map_center.y / 2) + map->pos.y;
 }
 
 /*
@@ -56,9 +59,14 @@ void	set_arrange(t_map *map)
 */
 t_vec3	arrange(t_vec3 p, t_map map)
 {
+	float	radians;
+
 	p.x *= map.space;
 	p.y *= map.space;
-	p.z *= map.zfac;
+	p.z = (int)(p.z * map.zfac);
+	radians = map.angle * (M_PI / 180.0);
+	p.x = (int)(p.x * cos(radians) - p.y * sin(radians));
+	p.y = (int)(p.x * sin(radians) + p.y * cos(radians));
 	return (p);
 }
 

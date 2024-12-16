@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/14 21:31:12 by jaubry--         ###   ########lyon.fr    #
+#    Updated: 2024/12/16 19:51:19 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,8 +35,8 @@ BOLD		= \e[1m
 RESET		= \e[0m
 
 # Directories
-OBJDIR		= .obj
-DEPDIR		= .dep
+OBJDIR		= .obj/$(SRCDIR)
+DEPDIR		= .dep/$(SRCDIR)
 LIBFTDIR	= libft
 MLXDIR		= minilibx-linux
 
@@ -44,8 +44,8 @@ MLXDIR		= minilibx-linux
 LIBFT		= $(LIBFTDIR)/libft.a
 
 # Compiler and flags
-WIDTH		= 1000
-HEIGHT		= 1000
+WIDTH		= 1500
+HEIGHT		= 1500
 
 CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
@@ -67,18 +67,8 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT) | mlx
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
-	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
+	$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
-
-bonus: $(OBJS) $(LIBFT) | mlx
-	@echo -e "$(BLUE)Creating program $(UNDERLINE)bonus$(RESET)$(BLUE)...$(RESET)"
-	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
-	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)bonus$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
-
-sbonus: $(OBJS) $(LIBFT) | mlx
-	@echo -e "$(BLUE)Creating program $(UNDERLINE)sbonus$(RESET)$(BLUE)...$(RESET)"
-	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
-	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)sbonus$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
 
 $(LIBFT):
 	@echo -e "$(PURPLE)➜ Building $(UNDERLINE)libft$(RESET)"
@@ -98,13 +88,13 @@ $(OBJDIR) $(DEPDIR):
 
 clean:
 	@$(MAKE) -s -C $(LIBFTDIR) clean
-	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
-	@rm -rf $(OBJDIR) $(DEPDIR)
+	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
+	@rm -rf $(firstword $(subst /,\ ,$(OBJDIR))) $(firstword $(subst /,\ ,$(DEPDIR)))
 
 fclean:
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
-	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
-	@rm -rf $(OBJDIR) $(DEPDIR)
+	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
+	@rm -rf $(firstword $(subst /,\ ,$(OBJDIR))) $(firstword $(subst /,\ ,$(DEPDIR)))
 	@echo -e "$(RED)Removing program $(UNDERLINE)$(NAME)$(RESET)"
 	@rm -f fdf bonus sbonus
 

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 20:35:45 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/16 19:51:28 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 # ifndef WIDTH
-#  define WIDTH 500
+#  define WIDTH 1500
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 500
+#  define HEIGHT 1500
 # endif
 # ifndef DEBUG
 #  define DEBUG 0
@@ -57,18 +57,20 @@ typedef struct s_img
 	int		height;
 }	t_img;
 
-typedef t_vec2 (*proj)(t_vec3 point);
+typedef t_vec2	(*t_proj)(t_vec3 point);
 
 typedef struct s_map
 {
 	size_t	width;
 	size_t	height;
 	t_vec2	offset;
+	t_vec2	pos;
+	int		angle;
 	int		space;
-	int		zfac;
+	float	zfac;
 	int		min;
 	int		max;
-	proj 	proj;
+	t_proj	proj;
 	t_pixel	**map;
 }	t_map;
 
@@ -125,6 +127,7 @@ t_vec3	arrange(t_vec3 p, t_map map);
 void	center(t_vec2 *p, t_map map);
 
 int		kill(t_env *env);
+int		mouse_handler(int mousecode, int x, int y, t_env *env);
 int		on_keypress(int keysym, t_env *env);
 void	kill_img(void *mlx, t_img *img);
 

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:59:37 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2024/12/16 19:44:17 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ int	main(int argc, char **argv)
 		env.img.img = NULL;
 		env.img.addr = NULL;
 		set_arrange(&env.map);
+		mlx_mouse_hook(env.win, &mouse_handler, &env);
 		mlx_hook(env.win, DestroyNotify, StructureNotifyMask, &kill, &env);
-		mlx_hook(env.win, KeyRelease, KeyReleaseMask, &on_keypress, &env);
+		mlx_hook(env.win, KeyPress, KeyPressMask, &on_keypress, &env);
 		mlx_loop_hook(env.mlx, &draw, &env);
 		mlx_loop(env.mlx);
 	}
