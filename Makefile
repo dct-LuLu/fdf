@@ -44,8 +44,8 @@ MLXDIR		= minilibx-linux
 LIBFT		= $(LIBFTDIR)/libft.a
 
 # Compiler and flags
-WIDTH		= 500
-HEIGHT		= 500
+WIDTH		= 1000
+HEIGHT		= 1000
 
 CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror

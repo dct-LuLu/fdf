@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/16 19:51:28 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/18 00:44:38 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 # ifndef WIDTH
-#  define WIDTH 1500
+#  define WIDTH 1000
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 1500
+#  define HEIGHT 1000
 # endif
 # ifndef DEBUG
 #  define DEBUG 0

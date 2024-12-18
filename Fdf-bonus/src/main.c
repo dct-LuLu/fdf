@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/16 19:44:17 by jaubry--         ###   ########.fr       */
+/*   Updated: 2024/12/18 00:51:18 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int	main(int argc, char **argv)
 		env.win = mlx_new_window(env.mlx, WIDTH, HEIGHT, "fdf");
 		env.img.img = NULL;
 		env.img.addr = NULL;
+		env.map.proj = NULL;
+		env.map.angle = 0;
+		env.map.angle = 0.0f;
+		env.map.pos.x = 0;
+		env.map.pos.y = 0;
 		set_arrange(&env.map);
 		mlx_mouse_hook(env.win, &mouse_handler, &env);
 		mlx_hook(env.win, DestroyNotify, StructureNotifyMask, &kill, &env);
