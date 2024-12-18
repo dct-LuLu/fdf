@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/16 19:51:19 by jaubry--         ###   ########.fr        #
+#    Updated: 2024/12/18 01:01:15 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,8 +44,8 @@ MLXDIR		= minilibx-linux
 LIBFT		= $(LIBFTDIR)/libft.a
 
 # Compiler and flags
-WIDTH		= 1500
-HEIGHT		= 1500
+WIDTH		= 500
+HEIGHT		= 500
 
 CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
@@ -89,12 +89,12 @@ $(OBJDIR) $(DEPDIR):
 clean:
 	@$(MAKE) -s -C $(LIBFTDIR) clean
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
-	@rm -rf $(firstword $(subst /,\ ,$(OBJDIR))) $(firstword $(subst /,\ ,$(DEPDIR)))
+	@rm -rf $(firstword $(subst /, ,$(OBJDIR))) $(firstword $(subst /, ,$(DEPDIR)))
 
 fclean:
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
-	@rm -rf $(firstword $(subst /,\ ,$(OBJDIR))) $(firstword $(subst /,\ ,$(DEPDIR)))
+	@rm -rf $(firstword $(subst /, ,$(OBJDIR))) $(firstword $(subst /, ,$(DEPDIR)))
 	@echo -e "$(RED)Removing program $(UNDERLINE)$(NAME)$(RESET)"
 	@rm -f fdf bonus sbonus
 
