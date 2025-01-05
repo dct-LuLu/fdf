@@ -6,13 +6,13 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/05 12:10:45 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/05 13:52:01 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SHELL := /bin/bash
 
-ifeq ($(filter bonus sbonus,$(MAKECMDGOALS)),)
+ifeq ($(filter bonus sbonus clean fclean,$(MAKECMDGOALS)),)
     include Fdf/fdf.mk
 endif
 
@@ -33,6 +33,8 @@ PURPLE		= \e[1;35m
 UNDERLINE	= \e[4m
 BOLD		= \e[1m
 RESET		= \e[0m
+
+BINARIES	= fdf bonus sbonus
 
 # Directories
 OBJDIR		= .obj/$(SRCDIR)
@@ -89,17 +91,17 @@ $(OBJDIR) $(DEPDIR):
 
 clean:
 	@$(MAKE) -s -C $(LIBFTDIR) clean
-	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
-	@rm -rf $(firstword $(subst /, ,$(OBJDIR))) $(firstword $(subst /, ,$(DEPDIR)))
+	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
+	@rm -rf $(OBJDIR) $(DEPDIR)
 
 fclean:
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
 	@$(MAKE) -s -C $(MLXDIR) clean
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
-	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
-	@rm -rf $(firstword $(subst /, ,$(OBJDIR))) $(firstword $(subst /, ,$(DEPDIR)))
-	@echo -e "$(RED)Removing program $(UNDERLINE)$(NAME)$(RESET)"
-	@rm -f fdf bonus sbonus
+	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
+	@rm -rf $(OBJDIR) $(DEPDIR)
+	@echo -e "$(RED)Cleaning binaries $(addsuffix $(RESET),$(addprefix $(RED)$(UNDERLINE)./,$(BINARIES)))"
+	@rm -rf $(BINARIES)
 
 re: fclean all
 
