@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2024/12/18 01:01:15 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/05 12:10:45 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ MLXDIR		= minilibx-linux
 
 # Output
 LIBFT		= $(LIBFTDIR)/libft.a
+MLX			= $(MLXDIR)/libmlx.a
 
 # Compiler and flags
 WIDTH		= 1000
@@ -51,8 +52,8 @@ CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
-LFLAGS		= -L$(MLXDIR) -lXext -lX11 -lm -lmlx
-CF			= $(CC) $(CFLAGS) $(IFLAGS) $(DFLAGS)
+LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -lXext -lX11 -lm -lmlx -lft
+CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
 vpath %.c $(LIBFTDIR)/$(SRCDIR)
@@ -65,22 +66,22 @@ DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT) | mlx
+$(NAME): $(OBJS) $(LIBFT) $(MLX)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
-	$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
+	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
 
 $(LIBFT):
 	@echo -e "$(PURPLE)➜ Building $(UNDERLINE)libft$(RESET)"
 	@$(MAKE) -s -C $(LIBFTDIR)
 
-mlx:
+$(MLX):
 	@echo -e "$(PURPLE)-> Building $(UNDERLINE)minilibx$(RESET)"
 	@$(MAKE) -s -C $(MLXDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	@echo -e "$(PURPLE)➜ Compiling $(UNDERLINE)$<$(RESET)"
-	@$(CF) -c $< -o $@
+	@$(CF) $(DFLAGS) -c $< -o $@
 
 $(OBJDIR) $(DEPDIR):
 	@echo -e "$(BLUE)Creating directory $(UNDERLINE)$@$(RESET)"
@@ -92,6 +93,8 @@ clean:
 	@rm -rf $(firstword $(subst /, ,$(OBJDIR))) $(firstword $(subst /, ,$(DEPDIR)))
 
 fclean:
+	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
+	@$(MAKE) -s -C $(MLXDIR) clean
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(NAME)$(RESET)$(RED) object files from $(UNDERLINE).obj$(RESET)$(RED) and $(UNDERLINE).dep$(RESET)"
 	@rm -rf $(firstword $(subst /, ,$(OBJDIR))) $(firstword $(subst /, ,$(DEPDIR)))
@@ -117,5 +120,5 @@ help:
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re debug help mlx
+.PHONY: all clean fclean re debug help
 
