@@ -3,22 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/17 14:02:54 by jaubry--         ###   ########.fr        #
+#    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
+#    Updated: 2025/01/17 14:07:01 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SHELL := /bin/bash
-
-ifeq ($(filter bonus sbonus clean fclean,$(MAKECMDGOALS)),)
-    include Fdf/fdf.mk
-endif
-
-ifeq ($(MAKECMDGOALS), bonus)
-	include Fdf-bonus/bonus.mk
-endif
 
 # Colors and formatting
 GREEN		= \e[1;32m
@@ -30,17 +22,19 @@ UNDERLINE	= \e[4m
 BOLD		= \e[1m
 RESET		= \e[0m
 
-BINARIES	= fdf bonus sbonus
-
 # Directories
-OBJDIR		= .obj/$(SRCDIR)
-DEPDIR		= .dep/$(SRCDIR)
-LIBFTDIR	= libft
-MLXDIR		= minilibx-linux
+INCDIR		= include
+SRCDIR		= src
+OBJDIR		= ../.obj/$(SRCDIR)
+DEPDIR		= ../.dep/$(SRCDIR)
+LIBFTDIR	= ../libft
+MLXDIR		= ../minilibx-linux
 
 # Output
+NAME		= ../oscilloscope_visualizer
 LIBFT		= $(LIBFTDIR)/libft.a
 MLX			= $(MLXDIR)/libmlx.a
+PA			= libportaudio.a
 
 # Compiler and flags
 WIDTH		= 1000
@@ -50,22 +44,24 @@ CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
-LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -lXext -lX11 -lm -lmlx -lft
+LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -lXext -lX11 -lm -lmlx -lft -lrt -lasound -ljack -pthread
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
-vpath %.c $(LIBFTDIR)/$(SRCDIR)
-vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR)
+vpath %.c $(LIBFTDIR)/$(SRCDIR) $(SRCDIR)
+vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR) $(INCDIR)
 vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
+SRCS		= main.c
+
+SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
 
-all: $(NAME)
+#gcc main.c libportaudio.a -lrt -lm -lasound -ljack -pthread -o YOUR_BINARY
 
-sbonus:
-	@$(MAKE) -s -C Fdf-sbonus
+all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
@@ -88,38 +84,6 @@ $(OBJDIR) $(DEPDIR):
 	@echo -e "$(BLUE)Creating directory $(UNDERLINE)$@$(RESET)"
 	@mkdir -p $@
 
-clean:
-	@$(MAKE) -s -C $(LIBFTDIR) clean
-	@echo -e "$(RED)Cleaning temporary files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
-	@rm -rf $(OBJDIR) $(DEPDIR)
-
-fclean:
-	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
-	@$(MAKE) -s -C $(MLXDIR) clean
-	@$(MAKE) -s -C $(LIBFTDIR) fclean
-	@echo -e "$(RED)Cleaning temporary files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
-	@rm -rf $(OBJDIR) $(DEPDIR)
-	@echo -e "$(RED)Cleaning binaries $(addsuffix $(RESET),$(addprefix $(RED)$(UNDERLINE)./,$(BINARIES)))"
-	@rm -f $(BINARIES)
-
-re: fclean all
-
-debug:
-	@echo -e "$(YELLOW)$(BOLD)⚠ Building in debug mode...$(RESET)"
-	@$(MAKE) -s -C $(LIBFTDIR) debug
-	@$(MAKE) -s CC="cc -g -D DEBUG=1 -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)" -B $(OBJS)
-	@$(MAKE) -s CC="cc -g -D DEBUG=1 -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)" $(NAME)
-	@echo -e "$(YELLOW)$(BOLD)✓ Debug build complete$(RESET)"
-
-help:
-	@echo "Available targets:"
-	@echo "  all     : Build the program"
-	@echo "  clean   : Remove object files"
-	@echo "  fclean  : Remove object files and program"
-	@echo "  re      : Rebuild everything"
-	@echo "  debug   : Build with debug symbols"
-
 -include $(DEPS)
 
-.PHONY: all clean fclean re debug help
-
+.PHONY: all
