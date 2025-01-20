@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/17 14:02:54 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/20 17:43:43 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ UNDERLINE	= \e[4m
 BOLD		= \e[1m
 RESET		= \e[0m
 
-BINARIES	= fdf bonus sbonus
+BINARIES	= fdf bonus oscilloscope_visualizer
 
 # Directories
 OBJDIR		= .obj/$(SRCDIR)
