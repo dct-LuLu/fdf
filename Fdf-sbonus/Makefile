@@ -6,7 +6,7 @@
 #    By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/21 14:36:08 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/21 14:58:15 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) -I$(PAINSTALL)/include
-LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib -lXext -lX11 -lm -lmlx -lft -lrt -lasound -pthread
+LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib -lXext -lX11 -lm -lmlx -lft -lrt -lasound -pthread -lportaudio -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
