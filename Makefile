@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/20 17:43:43 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/21 12:52:12 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,6 +96,9 @@ clean:
 fclean:
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
 	@$(MAKE) -s -C $(MLXDIR) clean
+	@echo -e "$(RED)Cleaning $(UNDERLINE)portaudio$(RESET)$(RED) library$(RESET)"
+	@$(MAKE) -s -C portaudio/pa_stable_v190700_20210406 clean
+	@rm -rf portaudio/install
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
 	@echo -e "$(RED)Cleaning temporary files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
 	@rm -rf $(OBJDIR) $(DEPDIR)

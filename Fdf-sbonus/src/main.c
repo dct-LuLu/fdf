@@ -6,9 +6,13 @@
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:30:40 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/17 13:30:50 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:10:17 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
+#include <math.h>
+#include "portaudio.h"
 
 int	main(void)
 {
