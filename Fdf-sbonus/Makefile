@@ -6,7 +6,7 @@
 #    By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/21 14:58:15 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/24 15:16:59 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,8 +45,8 @@ HEIGHT		= 1000
 CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
-IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) -I$(PAINSTALL)/include
-LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib -lXext -lX11 -lm -lmlx -lft -lrt -lasound -pthread -lportaudio -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
+IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) -I$(PAINSTALL)/include -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 
+	LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib -lXext -lX11 -lm -lmlx -lft -lrt -lasound -pthread -lportaudio -lpipewire-0.3 -lpulse -lpulse-simple -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
