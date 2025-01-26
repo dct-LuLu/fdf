@@ -6,7 +6,7 @@
 #    By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/24 15:16:59 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/25 23:05:35 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,10 +43,10 @@ WIDTH		= 1000
 HEIGHT		= 1000
 
 CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) -I$(PAINSTALL)/include -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 
-	LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib -lXext -lX11 -lm -lmlx -lft -lrt -lasound -pthread -lportaudio -lpipewire-0.3 -lpulse -lpulse-simple -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
+LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib -L$(HOME)/.local/lib -lXext -lX11 -lm -lmlx -lft -lrt -lasound -pthread -lportaudio -lpipewire-0.3 -lpulse -lpulse-simple -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
@@ -55,7 +55,7 @@ vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR) $(INCDIR)
 vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
-SRCS		= main.c
+SRCS		= broken-delay-dB-jauge.c
 
 SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
