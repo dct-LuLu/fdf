@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:46:35 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/26 02:13:20 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/01/26 02:32:43 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 #define SAMPLE_RATE 48000
 #define CHANNELS 2
-#define BUFFER_DURATION_MS 5
+#define BUFFER_DURATION_MS 2
 
-#define GAUGE_WIDTH 40  // The width of the gauge (number of characters)
+#define GAUGE_WIDTH 130  // The width of the gauge (number of characters)
 #define MIN_DB -60     // Minimum dBFS (for silence, or the lowest visible level)
 #define MAX_DB 0       // Maximum dBFS (representing 0 dBFS, the maximum level)
 
@@ -163,7 +163,10 @@ void *audio_processing_thread() {
 
         for (size_t i = 0; i < buf_len; i++) {
         	printf("%d\t", buffer[i]);
+            if ((i + 1) % 4 == 0)
+                printf("\n");
         }
+        printf("\n");
         /*printf("[");
         for (int i = 0; i < GAUGE_WIDTH; i++) {
             if (i < gauge_level) {
