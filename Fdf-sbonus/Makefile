@@ -6,7 +6,7 @@
 #    By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/25 23:05:35 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/28 10:42:01 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR) $(INCDIR)
 vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
-SRCS		= broken-delay-dB-jauge.c
+SRCS		= pulse_audio_fader.c
 
 SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))

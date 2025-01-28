@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   broken-delay-dB-jauge.c                            :+:      :+:    :+:   */
+/*   pulse_audio_fader.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:46:35 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/26 02:32:43 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/01/28 10:40:56 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 #define CHANNELS 2
 #define BUFFER_DURATION_MS 2
 
-#define GAUGE_WIDTH 130  // The width of the gauge (number of characters)
+#define GAUGE_WIDTH 120  // The width of the gauge (number of characters)
 #define MIN_DB -60     // Minimum dBFS (for silence, or the lowest visible level)
 #define MAX_DB 0       // Maximum dBFS (representing 0 dBFS, the maximum level)
+#define MAX_SAMPLE 32768.0
 
 /*
 	Function that computes the RMS of the PCM signal.
@@ -41,7 +42,7 @@ double	compute_rms(int16_t *buffer, size_t buf_len, int channel_i)
     rms = 0.0;
     while ((i + channel_i) < buf_len)
     {
-        normalized_sample = buffer[i + channel_i] / 32768.0;
+        normalized_sample = buffer[i + channel_i] / MAX_SAMPLE;
         rms += normalized_sample * normalized_sample;
         i += CHANNELS;
     }
@@ -68,7 +69,7 @@ double  peak_db(int16_t *buffer, size_t buf_len, int channel_i)
             peak = abs_sample;
         i += CHANNELS;
     }
-    return (20 * log10((double)peak / 32768.0));
+    return (20 * log10((double)peak / MAX_SAMPLE));
 }
 
 
@@ -94,7 +95,7 @@ void display_dBfs_gauge(double peak_dbfs)
         else
             printf(" ");  // Empty space
     }
-    printf("] %.2f dBFS\n", peak_dbfs);
+    printf("] %.2f peak dBFS\n", peak_dbfs);
 }
 //double  compute_
 
