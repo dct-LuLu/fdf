@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/21 12:52:12 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/30 01:31:15 by jaubry--         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,8 +45,9 @@ MLX			= $(MLXDIR)/libmlx.a
 # Compiler and flags
 WIDTH		= 1000
 HEIGHT		= 1000
+DEBUG		= 0
 
-CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)
+CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:46:35 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/28 10:40:56 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:32:13 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ void *audio_processing_thread() {
     int16_t *buffer = malloc(buf_size);
 
     // Capture loop
-    while (1) {
+    int i = 0;
+    while (true) {
         // Clear the terminal screen
         printf("\033[H\033[J");
 
@@ -178,6 +179,7 @@ void *audio_processing_thread() {
         }
         printf("]\n");*/
         //break;
+        i++;
     }
 
     free(buffer);
