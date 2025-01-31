@@ -28,8 +28,12 @@
 # endif
 # include <signal.h>
 # include <pthread.h>
+# define MAX_SAMPLE 32768.0
 extern pthread_mutex_t			stop_mutex; 
 extern volatile sig_atomic_t	stop;
+extern pthread_mutex_t			audio_mutex;
+extern int16_t					*buffer;
+extern size_t					buf_len;
 
 typedef struct s_vec2
 {
@@ -81,5 +85,7 @@ int		on_keypress(int keysym, t_env *env);
 void	kill_img(void *mlx, t_img *img);
 
 void	*mlx_thread_feur(void *arg);
+
+void	draw_osci(t_env env);
 
 #endif

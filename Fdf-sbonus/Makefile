@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/30 03:19:42 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/31 11:51:04 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ RESET		= \e[0m
 # Directories
 INCDIR		= include
 #SRCDIR		= src
-SRCDIR		= audio_tests
-#SRCDIR		= testo
+#SRCDIR		= audio_tests
+SRCDIR		= testo
 OBJDIR		= ../.obj/$(SRCDIR)
 DEPDIR		= ../.dep/$(SRCDIR)
 LIBFTDIR	= ../libft
@@ -45,7 +45,7 @@ WIDTH		= 1000
 HEIGHT		= 1000
 DEBUG		= 0
 
-CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG) -g3
+CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG) -Ofast
 #-fsanitize=thread -fno-omit-frame-pointer
 
 CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT
@@ -65,8 +65,8 @@ vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR) $(INCDIR)
 vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
-SRCS		= better_alsa_faders.c
-#SRCS		= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c better_alsa_faders.c
+#SRCS		= better_alsa_faders.c
+SRCS		= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c better_alsa_faders.c osci.c
 #main.c audio_utils.c img_utils.c mlx.c mlx_hooks.c vec2.c
 
 SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))

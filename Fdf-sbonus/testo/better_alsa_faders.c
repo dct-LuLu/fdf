@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:42:39 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/30 03:34:53 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:44:08 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,12 @@
 #include "libft.h"
 #include "fdf.h"
 
-#define SAMPLE_RATE 48000
-#define CHANNELS 1
+#define SAMPLE_RATE 192000
+#define CHANNELS 2
 #define BUFFER_DURATION_MS 1
 #define GAUGE_WIDTH 120  // The width of the gauge (number of characters)
 #define MIN_DB -60     // Minimum dBFS (for silence, or the lowest visible level)
 #define MAX_DB 0       // Maximum dBFS (representing 0 dBFS, the maximum level)
-#define MAX_SAMPLE 32768.0
 
 static pa_mainloop *mainloop = NULL;
 static pa_mainloop_api *mainloop_api = NULL;
@@ -32,6 +31,9 @@ static pa_stream *stream = NULL;
 
 pthread_mutex_t	stop_mutex = PTHREAD_MUTEX_INITIALIZER;
 volatile sig_atomic_t	stop = 0;
+pthread_mutex_t	audio_mutex = PTHREAD_MUTEX_INITIALIZER;
+int16_t	*buffer	= NULL;
+size_t  buf_len = 0;
 
 void	handle_signal(int signal)
 {
@@ -41,108 +43,18 @@ void	handle_signal(int signal)
 	pthread_mutex_unlock(&stop_mutex);
 }
 
-double compute_rms(int16_t *buffer, size_t buf_len, int channel_i)
-{
-    size_t i;
-    double rms = 0.0;
-    double normalized_sample;
-
-    for (i = 0; i < buf_len; i += CHANNELS)
-    {
-        normalized_sample = buffer[i + channel_i] / MAX_SAMPLE;
-        rms += normalized_sample * normalized_sample;
-    }
-    return sqrt(rms / (buf_len / CHANNELS));
-}
-
-double convert_dbfs(double rms)
-{
-    return (20 * log10(rms));
-}
-
-double peak_db(int16_t *buffer, size_t buf_len, int channel_i)
-{
-    size_t i;
-    int peak = 0;
-    int abs_sample;
-
-    for (i = 0; i < buf_len; i += CHANNELS)
-    {
-        abs_sample = abs(buffer[i + channel_i]);
-        if (abs_sample > peak)
-            peak = abs_sample;
-    }
-    return (20 * log10((double)peak / MAX_SAMPLE));
-}
-
-void display_dBfs_gauge(double peak_dbfs)
-{
-    // Clamp the peak dBFS value to be between MIN_DB and MAX_DB
-    if (peak_dbfs > MAX_DB)
-        peak_dbfs = MAX_DB;
-
-    // Map the peak dBFS to a position on the gauge
-    double range = MAX_DB - MIN_DB;        // The total range in dB (from -60 dB to 0 dB)
-    double scale = (peak_dbfs - MIN_DB) / range;  // Scale factor to convert dB to percentage
-
-    // Calculate the number of "bars" (segments) for the gauge
-    int num_bars = (int)(scale * GAUGE_WIDTH);  // The number of characters to represent the level
-
-    // Display the gauge
-    printf("[");
-    for (int i = 0; i < GAUGE_WIDTH; i++)
-    {
-        if (i < num_bars)
-            printf("#");  // Active bar
-        else
-            printf(" ");  // Empty space
-    }
-    printf("] %.2f peak dBFS\n", peak_dbfs);
-}
-
 void stream_read_callback(pa_stream *s, size_t buf_size, void *userdata)
 {
     (void)userdata;  // Suppress unused parameter warning
 
-    int16_t *data;
-    size_t buf_len = buf_size / sizeof(int16_t);
-    if (pa_stream_peek(s, (const void **)&data, &buf_size) == 0)
-    {
-        // Process the audio data here
-        double l_rms = compute_rms(data, buf_len, 0);
-        double r_rms = compute_rms(data, buf_len, 1);
-        double l_peak = peak_db(data, buf_len, 0);
-        double r_peak = peak_db(data, buf_len, 1);
-
-		//printf("\033[H\033[J");
-        // Print dB and gauge
-        printf("FL: %.2fRMS\t%.2fdBFS\n", l_rms, convert_dbfs(l_rms));
-        display_dBfs_gauge(l_peak);
-
-        printf("\n\n");
-        printf("FR: %.2fRMS\t%.2fdBFS\n", r_rms, convert_dbfs(r_rms));
-        display_dBfs_gauge(r_peak);
-
-		printf("\n\nPCM SIGNAL:\n");
-
-        usleep(10000000);
-		/*
-        for (size_t i = 0; i < buf_len / 2; i++) {
-        	printf("%d\t", data[i]);
-            if ((i + 1) % 24 == 0)
-                printf("\n");
-        }
-        printf("\n");
-        */
-        // After processing, forget the data to continue receiving more
+    buf_len = buf_size / sizeof(int16_t);
+    if (pa_stream_peek(s, (const void **)&buffer, &buf_size) == 0)
         pa_stream_drop(s);
-    }
 }
 
 void context_state_callback(pa_context *c, void *userdata)
 {
     (void)userdata;  // Suppress unused parameter warning
-
     pa_context_state_t state = pa_context_get_state(c);
 
     if (state == PA_CONTEXT_READY)
@@ -152,6 +64,14 @@ void context_state_callback(pa_context *c, void *userdata)
             .rate = SAMPLE_RATE,
             .channels = CHANNELS
         };
+
+        pa_buffer_attr  attr = {
+            .maxlength = (uint32_t)-1,
+            .minreq = (uint32_t)-1,
+            .prebuf = (uint32_t)-1,
+            .fragsize = 1,
+            .tlength = 1
+        };//allow fast signal lol, doesnt work on ubuntu tho, but izokay it gives already the fastest
         const char *monitor_source_name = "alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K7-00.analog-stereo.monitor";
 
         // Create and configure the stream for recording from the monitor source
@@ -167,7 +87,7 @@ void context_state_callback(pa_context *c, void *userdata)
         pa_stream_set_read_callback(stream, stream_read_callback, NULL);
 
         // Connect the stream to the specific monitor source
-        if (pa_stream_connect_record(stream, monitor_source_name, NULL, PA_STREAM_NOFLAGS) < 0)
+        if (pa_stream_connect_record(stream, monitor_source_name, &attr, PA_STREAM_ADJUST_LATENCY) < 0)
         {
             fprintf(stderr, "Failed to connect to monitor source: %s\n", pa_strerror(pa_context_errno(c)));
             pa_mainloop_quit(mainloop, 0);
@@ -213,7 +133,6 @@ void	*snd(void *args)
         *ret = 1;
         return ((void*)ret);
     }
-
     // Run the mainloop
     bool	in = true;
     while (in)
@@ -461,10 +380,10 @@ int main(void)
     //th_mlx__pa();//    MLX THREADED            PULSEAUDIO               #ff0000
 
 
-    //th_mlx__th_pa();// MLX THREADED            PULSEAUDIO THREADED      #ff0000  
+	th_mlx__th_pa();// MLX THREADED            PULSEAUDIO THREADED      #ff0000  
 
     //mlx__pa();//       MLX                     PULSEAUDIO               #ff0000
-    mlx__th_else();//  MLX                     NOTHING    THREADED      #ff0000
+	//mlx__th_else();//  MLX                     NOTHING    THREADED      #ff0000
     return (0);
 }
 

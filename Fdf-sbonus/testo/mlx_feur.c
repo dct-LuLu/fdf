@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/30 02:48:17 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/01/31 12:01:07 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ int	draw(t_env *env)
 	}
 	else
 		pthread_mutex_unlock(&stop_mutex);
-	kill_img(env->mlx, &env->img);
-	env->img = init_img(env->mlx, WIDTH, HEIGHT);
+	//kill_img(env->mlx, &env->img);
+	//env->img = init_img(env->mlx, WIDTH, HEIGHT);
 	if (!env->img.img || !env->img.addr)
 		return (1);
 		//exit(1);
+	draw_osci(*env);
 	if (DEBUG)
 		debug_draw(*env);
 	mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
@@ -44,10 +45,10 @@ int	draw(t_env *env)
 void	*mlx_thread_feur(void *arg)
 {
 	t_env	*env;
-	//int		*ret;
+	int		*ret;
 
-	env = (t_env *)arg;
-	/*
+
+	ret = (int *)arg;
 	env = calloc(1, sizeof(t_env));
 	if (!env)
 	{
@@ -62,7 +63,6 @@ void	*mlx_thread_feur(void *arg)
 		*ret = 1;
 		return (ret);
 	}
-	env->win = NULL;
 	env->win = mlx_new_window(env->mlx, WIDTH, HEIGHT, "osci");
 	if (!env->win)
 	{
@@ -73,8 +73,7 @@ void	*mlx_thread_feur(void *arg)
 	}
 	env->img.img = NULL;
 	env->img.addr = NULL;
-	*/
-
+	env->img = init_img(env->mlx, WIDTH, HEIGHT);
 
 	mlx_hook(env->win, DestroyNotify, StructureNotifyMask, &kill_mlx, env);
 	mlx_hook(env->win, KeyRelease, KeyReleaseMask, &on_keypress, env);
@@ -83,6 +82,6 @@ void	*mlx_thread_feur(void *arg)
 
 	kill_mlx(env);
 
-	//*ret = 0;
-	return (NULL);
+	*ret = 0;
+	return (ret);
 }
