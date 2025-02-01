@@ -6,11 +6,33 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/29 21:57:06 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:13:03 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
+{
+	int				x;
+	int				y;
+	int				offset;
+	unsigned int	*pixels;
+
+	offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
+	pixels = (unsigned int *)(img->addr + offset);
+	x = 0;
+	while (x < size.x)
+	{
+		y = 0;
+		while (y < size.y)
+		{
+			pixels[x + y * img->line_len / img->byte_depth] = color;
+			y++;
+		}
+		x++;
+	}
+}
 
 /*
 	Function that draws a pixel directly on the address of the img
@@ -74,6 +96,7 @@ t_img	init_img(void *mlx, int width, int height)
 {
 	t_img	img;
 
+	//img.img = mlx_new_image_alpha(mlx, width, height);
 	img.img = mlx_new_image(mlx, width, height);
 	img.addr = mlx_get_data_addr(img.img, &img.byte_depth,
 			&img.line_len, &img.endian);

@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/31 11:51:04 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/01/31 17:44:18 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) \
 			  -I$(PAINSTALL)/include -I/usr/include/pipewire-0.3 \
 			  -I/usr/include/spa-0.2 
 LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib \
-			  -L$(HOME)/.local/lib -lXext -lX11 -lm -lmlx -lft -lrt \
+			  -L$(HOME)/.local/lib -lXext -lX11 -lXrender -lm -lmlx -lft -lrt \
 			  -lasound -pthread -lportaudio -lpipewire-0.3 -lpulse \
 			  -lpulse-simple -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)

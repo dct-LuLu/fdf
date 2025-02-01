@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/30 01:31:15 by jaubry--         ###   ########lyon.fr    #
+#    Updated: 2025/01/31 17:42:59 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG)
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
-LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -lXext -lX11 -lm -lmlx -lft
+LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -lXext -lX11 -lXrender -lm -lmlx -lft
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
@@ -79,7 +79,8 @@ $(LIBFT):
 
 $(MLX):
 	@echo -e "$(PURPLE)-> Building $(UNDERLINE)minilibx$(RESET)"
-	@$(MAKE) -s -C $(MLXDIR)
+	@$(MAKE) -s -C $(MLXDIR) "CFLAGS=-DSTRINGPUTX11 -Ofast \
+		-Wno-deprecated -Wno-return-type -Wno-parentheses -Wno-pointer-sign"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	@echo -e "$(PURPLE)➜ Compiling $(UNDERLINE)$<$(RESET)"
