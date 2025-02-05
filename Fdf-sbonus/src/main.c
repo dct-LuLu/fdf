@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:46:35 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/29 20:49:47 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:46:38 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ int	kill_osci(t_env env)
 	{
 	*/
 	kill_mlx(env);
-		/*
 		if (env->pa)
 			kill_audio(env->pa);
-		*/
 	/*	free(env);
 	}*/
 	return (0);

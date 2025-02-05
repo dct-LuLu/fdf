@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/31 17:44:18 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/05 16:20:56 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,32 +30,32 @@ SRCDIR		= testo
 OBJDIR		= ../.obj/$(SRCDIR)
 DEPDIR		= ../.dep/$(SRCDIR)
 LIBFTDIR	= ../libft
-MLXDIR		= ../minilibx-linux
-PADIR		= ../portaudio
-PAINSTALL	= $(PADIR)/install
+MLXDIR		= ../minilibx-linux-edit
 
 # Output
 NAME		= ../oscilloscope_visualizer
 LIBFT		= $(LIBFTDIR)/libft.a
 MLX			= $(MLXDIR)/libmlx.a
-PA			= $(PAINSTALL)/lib/libportaudio.a
 
-# Compiler and flags
+# Variables
 WIDTH		= 1000
 HEIGHT		= 1000
+GLASS		= 0
 DEBUG		= 0
 
-CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG) -Ofast
+CC			= cc
 #-fsanitize=thread -fno-omit-frame-pointer
 
-CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT
+CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast
+CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) \
+			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) \
 			  -I$(PAINSTALL)/include -I/usr/include/pipewire-0.3 \
 			  -I/usr/include/spa-0.2 
-LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -L$(PAINSTALL)/lib \
+LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) \
 			  -L$(HOME)/.local/lib -lXext -lX11 -lXrender -lm -lmlx -lft -lrt \
-			  -lasound -pthread -lportaudio -lpipewire-0.3 -lpulse \
+			  -lasound -pthread -lpipewire-0.3 -lpulse \
 			  -lpulse-simple -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
@@ -73,11 +73,9 @@ SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
 
-#gcc main.c libportaudio.a -lrt -lm -lasound -ljack -pthread -o YOUR_BINARY
-
 all: $(NAME)
 
-$(NAME): $(PA) $(LIBFT) $(MLX) $(OBJS)
+$(NAME): $(LIBFT) $(MLX) $(OBJS)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
 	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
@@ -88,21 +86,8 @@ $(LIBFT):
 
 $(MLX):
 	@echo -e "$(PURPLE)-> Building $(UNDERLINE)minilibx$(RESET)"
-	@$(MAKE) -s -C $(MLXDIR)
-
-$(PA): $(PAINSTALL)
-	@echo -e "$(PURPLE)-> Building $(UNDERLINE)portaudio$(RESET)"
-	# we enter in the pa_stable dir to avoid junk file in the position where the user calls make
-	@echo -e "$(PURPLE)Installing PortAudio to: $(UNDERLINE)$(realpath $(PAINSTALL))$(RESET)"
-	# wasnt able to setup some sort of auto configure, because calling it from the makefile doesnt seem to work
-	#"cd $(realpath $(PADIR))/pa_stable_v190700_20210406 && ./configure --with-alsa --without-jack --without-sndio --without-oss --prefix=$(realpath $(PAINSTALL))")
-
-	make -C $(PADIR)/pa_stable_v190700_20210406
-	make -C $(PADIR)/pa_stable_v190700_20210406 install
-
-$(PAINSTALL):
-	@echo -e "$(BLUE)Creating directory $(UNDERLINE)$@$(RESET)"
-	@mkdir -p $@
+	@$(MAKE) -s -C $(MLXDIR) "CFLAGS=-DSTRINGPUTX11 -Ofast \
+		-Wno-deprecated -Wno-return-type -Wno-parentheses -Wno-pointer-sign"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	@echo -e "$(PURPLE)➜ Compiling $(UNDERLINE)$<$(RESET)"

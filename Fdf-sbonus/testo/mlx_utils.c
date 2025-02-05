@@ -6,11 +6,33 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/31 18:13:03 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:18:31 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int blend_colors(int base_color, int new_color) {
+	if (base_color == 0 && new_color == 0)
+		return (0);
+    int base_a = (base_color >> 24) & 0xFF;
+    int base_r = (base_color >> 16) & 0xFF;
+    int base_g = (base_color >> 8) & 0xFF;
+    int base_b = base_color & 0xFF;
+
+    int new_a = (new_color >> 24) & 0xFF;
+    int new_r = (new_color >> 16) & 0xFF;
+    int new_g = (new_color >> 8) & 0xFF;
+    int new_b = new_color & 0xFF;
+
+    int out_a = base_a + (new_a * (255 - base_a) / 255);
+    int out_r = (base_r * base_a + new_r * new_a * (255 - base_a) / 255) / out_a;
+    int out_g = (base_g * base_a + new_g * new_a * (255 - base_a) / 255) / out_a;
+    int out_b = (base_b * base_a + new_b * new_a * (255 - base_a) / 255) / out_a;
+
+    return (out_a << 24) | (out_r << 16) | (out_g << 8) | out_b;
+}
+
 
 void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
@@ -18,6 +40,7 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 	int				y;
 	int				offset;
 	unsigned int	*pixels;
+	size_t			i;
 
 	offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
 	pixels = (unsigned int *)(img->addr + offset);
@@ -27,10 +50,15 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 		y = 0;
 		while (y < size.y)
 		{
-			pixels[x + y * img->line_len / img->byte_depth] = color;
+			i = x + y * img->line_len / img->byte_depth;
+			if (GLASS)
+				pixels[i] = color;
+			else
+				pixels[i] = blend_colors(pixels[i], color);
 			y++;
 		}
 		x++;
+
 	}
 }
 
@@ -96,8 +124,10 @@ t_img	init_img(void *mlx, int width, int height)
 {
 	t_img	img;
 
-	//img.img = mlx_new_image_alpha(mlx, width, height);
-	img.img = mlx_new_image(mlx, width, height);
+	if (GLASS)
+		img.img = mlx_new_image(mlx, width, height);
+	else
+		img.img = mlx_new_image_alpha(mlx, width, height);
 	img.addr = mlx_get_data_addr(img.img, &img.byte_depth,
 			&img.line_len, &img.endian);
 	img.byte_depth /= 8;

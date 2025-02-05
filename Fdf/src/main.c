@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:59:37 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/05 16:33:37 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ void	debug_draw(t_env env)
 
 int	draw(t_env *env)
 {
-	kill_img(env->mlx, &env->img);
-	env->img = init_img(env->mlx, WIDTH, HEIGHT);
-	if (!env->img.img || !env->img.addr)
-		exit(1);
+	ft_mlx_batch_put(&env->img, (t_vec2){0, 0}, (t_vec2){WIDTH,HEIGHT}, 0); 
 	draw_map(*env);
 	if (DEBUG)
 		debug_draw(*env);
@@ -44,8 +41,7 @@ int	main(int argc, char **argv)
 		if (!env.mlx)
 			return (free_map(env.map.map, env.map.height), 1);
 		env.win = mlx_new_window(env.mlx, WIDTH, HEIGHT, "fdf");
-		env.img.img = NULL;
-		env.img.addr = NULL;
+		env.img = init_img(env.mlx, WIDTH, HEIGHT);
 		set_arrange(&env.map);
 		mlx_hook(env.win, DestroyNotify, StructureNotifyMask, &kill, &env);
 		mlx_hook(env.win, KeyRelease, KeyReleaseMask, &on_keypress, &env);

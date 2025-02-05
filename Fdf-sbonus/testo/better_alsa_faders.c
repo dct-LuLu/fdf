@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:42:39 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/31 14:44:08 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:52:58 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,7 +285,7 @@ int	th_mlx__th_pa(void) // MLX THREADED + PULSEAUDIO THREADED
 
     free(ret_audio);
     free(ret_mlx);
-	return (0);
+	return (ret_mlx || ret_audio);
 }
 
 // ################################## FULL NOT THREADED ##################################

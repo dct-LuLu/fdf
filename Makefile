@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/01/31 17:42:59 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/05 16:26:47 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,13 +42,14 @@ MLXDIR		= minilibx-linux
 LIBFT		= $(LIBFTDIR)/libft.a
 MLX			= $(MLXDIR)/libmlx.a
 
-# Compiler and flags
+# Variables
 WIDTH		= 1000
 HEIGHT		= 1000
 DEBUG		= 0
 
-CC			= cc -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG)
-CFLAGS		= -Wall -Wextra -Werror
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror 
+CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
 LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) -lXext -lX11 -lXrender -lm -lmlx -lft
@@ -68,7 +69,7 @@ all: $(NAME)
 sbonus:
 	@$(MAKE) -s -C Fdf-sbonus
 
-$(NAME): $(OBJS) $(LIBFT) $(MLX)
+$(NAME): $(MLX) $(LIBFT) $(OBJS)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
 	@$(CC) $(CFLAGS) $(IFLAGS) $^ $(LFLAGS) -o $@
 	@echo -e "$(GREEN)$(BOLD)✓ Program $(UNDERLINE)$(NAME)$(RESET)$(GREEN)$(BOLD) successfully created!$(RESET)"
@@ -79,8 +80,7 @@ $(LIBFT):
 
 $(MLX):
 	@echo -e "$(PURPLE)-> Building $(UNDERLINE)minilibx$(RESET)"
-	@$(MAKE) -s -C $(MLXDIR) "CFLAGS=-DSTRINGPUTX11 -Ofast \
-		-Wno-deprecated -Wno-return-type -Wno-parentheses -Wno-pointer-sign"
+	@$(MAKE) -s -C $(MLXDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	@echo -e "$(PURPLE)➜ Compiling $(UNDERLINE)$<$(RESET)"
@@ -98,9 +98,6 @@ clean:
 fclean:
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
 	@$(MAKE) -s -C $(MLXDIR) clean
-	@echo -e "$(RED)Cleaning $(UNDERLINE)portaudio$(RESET)$(RED) library$(RESET)"
-	@$(MAKE) -s -C portaudio/pa_stable_v190700_20210406 clean
-	@rm -rf portaudio/install
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
 	@echo -e "$(RED)Cleaning temporary files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
 	@rm -rf $(OBJDIR) $(DEPDIR)
