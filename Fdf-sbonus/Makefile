@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/05 16:20:56 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/05 18:38:25 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ DEBUG		= 0
 CC			= cc
 #-fsanitize=thread -fno-omit-frame-pointer
 
-CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast
+CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast -g3
 CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) \
 			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d

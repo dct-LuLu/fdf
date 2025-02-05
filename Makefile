@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/05 16:26:47 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/05 18:50:02 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,6 +98,7 @@ clean:
 fclean:
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
 	@$(MAKE) -s -C $(MLXDIR) clean
+	@$(MAKE) -s -C $(MLXDIR)-edit clean
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
 	@echo -e "$(RED)Cleaning temporary files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
 	@rm -rf $(OBJDIR) $(DEPDIR)

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 17:04:12 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:35:38 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	*mlx_thread_feur(void *arg)
 	mlx_loop(env->mlx);
 
 	kill_mlx(env);
-
 	*ret = 0;
 	return (ret);
 }
