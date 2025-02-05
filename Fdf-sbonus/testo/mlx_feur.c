@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 16:19:52 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:04:12 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	draw(t_env *env)
 			return (1);
 	}
 	else
-		ft_mlx_batch_put(&env->img, (t_vec2){0, 0}, (t_vec2){WIDTH,HEIGHT}, argb(12, 0,0,0));
+		ft_mlx_batch_put(&env->img, (t_vec2){0, 0}, (t_vec2){WIDTH,HEIGHT}, argb(15, 0,0,0));
 	draw_osci(*env);
 	mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
 	return (0);
