@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/01 12:42:56 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:43:36 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@
 
 */
 
+t_vec2	half = (t_vec2){WIDTH / 2, HEIGHT / 2};
+t_vec2	quarter = (t_vec2){WIDTH / 4, HEIGHT / 4};
+
 void	draw_osci_side(t_env env, t_vec2 half, int channel)
 {
 	size_t	i;
 	t_vec2	pos;
-	t_vec2	quarter;
 
-	quarter = (t_vec2){half.x / 2, half.y / 2};
 	i = 0;
 	while (i < buf_len)
 	{
@@ -38,24 +39,96 @@ void	draw_osci_side(t_env env, t_vec2 half, int channel)
 			((float)i / (buf_len / 2)) * quarter.x,
 			(quarter.y - (quarter.y * ((float)(buffer[i + channel]) / MAX_SAMPLE))) + (half.y * channel)
 				);
-		unsigned int color = (0x10 << 24) | (0xFF << 16) | (0x00 << 8) | 0x00;
-		ft_mlx_pixel_put(&env.img, pos, color);
+//unsigned int color = (0x10 << 24) | (0xFF << 16) | (0x00 << 8) | 0x00;
+		ft_mlx_pixel_put(&env.img, pos, 0xFF0000);
 		i += 2;
 	}
 }
+
+#include <math.h>
+
+// Function to convert ARGB to HSV
+void argb_to_hsv(unsigned int argb, float* h, float* s, float* v)
+{
+    float r = ((argb >> 16) & 0xFF) / 255.0f;
+    float g = ((argb >> 8) & 0xFF) / 255.0f;
+    float b = (argb & 0xFF) / 255.0f;
+
+    float cmax = fmaxf(fmaxf(r, g), b);
+    float cmin = fminf(fminf(r, g), b);
+    float diff = cmax - cmin;
+
+    // Hue calculation
+    if (diff == 0) *h = 0;
+    else if (cmax == r) *h = fmodf((g - b) / diff, 6.0f);
+    else if (cmax == g) *h = (b - r) / diff + 2.0f;
+    else *h = (r - g) / diff + 4.0f;
+
+    if (*h < 0) *h += 6.0f;
+
+    *h *= 60.0f;
+
+    // Saturation calculation
+    if (cmax == 0) *s = 0;
+    else *s = diff / cmax;
+
+    // Value calculation
+    *v = cmax;
+}
+
+// Function to convert HSV back to ARGB
+unsigned int hsv_to_argb(float h, float s, float v)
+{
+    float c = v * s;
+    float x = c * (1 - fabsf(fmodf(h / 60.0f, 2) - 1));
+    float m = v - c;
+
+    float r, g, b;
+    if (0 <= h && h < 60) { r = c; g = x; b = 0; }
+    else if (60 <= h && h < 120) { r = x; g = c; b = 0; }
+    else if (120 <= h && h < 180) { r = 0; g = c; b = x; }
+    else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
+    else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
+    else { r = c; g = 0; b = x; }
+
+    r += m;
+    g += m;
+    b += m;
+
+    return ((int)(r * 255) << 16) | ((int)(g * 255) << 8) | ((int)(b * 255)) | 0xFF000000;
+}
+
+// Function to smoothly transition through the rainbow spectrum
+void rainbow_transition(unsigned int* argb, float hue_increment)
+{
+    float h, s, v;
+
+    // Convert current ARGB to HSV
+    argb_to_hsv(*argb, &h, &s, &v);
+
+    // Increment hue and ensure it wraps around
+    h += hue_increment;
+    if (h >= 360.0f) h -= 360.0f;
+
+    // Convert back to ARGB
+    *argb = hsv_to_argb(h, s, v);
+}
+
+unsigned int color = 0xFF0000FF; // Starting with pure red (ARGB format)
+float hue_increment = 0.3f; // Change the hue by 1 degree each time
+
+// Transition the color
 
 void	draw_osci(t_env env)
 {
     size_t  i;
     t_vec2  pos;
-    t_vec2	half;
     /*
     t_vec2  old;
 
     old.x = 0;
     old.y = 0;
     */
-    half = (t_vec2){env.img.width / 2, env.img.height / 2};
     i = 0;
     pthread_mutex_lock(&audio_mutex);
     if (DEBUG)
@@ -63,6 +136,7 @@ void	draw_osci(t_env env)
 	    draw_osci_side(env, half, 0);
     	draw_osci_side(env, half, 1);
     }
+    rainbow_transition(&color, hue_increment);
     while (i < buf_len)
     {
         pos = new_vec2(
@@ -73,8 +147,7 @@ void	draw_osci(t_env env)
         //if (old.x && old.y)
         //    ft_mlx_line_put(&env.img, old, pos, argb(255, 0, 255, 0));
         //old = pos;
-
-        unsigned int color = (0x10 << 24) | (0x00 << 16) | (0xFF << 8) | 0x00;
+	
         ft_mlx_pixel_put(&env.img, pos, color);
         i += 2;
     }

@@ -6,35 +6,32 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 16:18:31 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:38:27 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int blend_colors(int base_color, int new_color) {
-	if (base_color == 0 && new_color == 0)
-		return (0);
-    int base_a = (base_color >> 24) & 0xFF;
-    int base_r = (base_color >> 16) & 0xFF;
-    int base_g = (base_color >> 8) & 0xFF;
-    int base_b = base_color & 0xFF;
+unsigned int blend_colors(t_color base, t_color new)
+{
+    if (base.a == 0xFF)
+        return (0xFF000000);
 
-    int new_a = (new_color >> 24) & 0xFF;
-    int new_r = (new_color >> 16) & 0xFF;
-    int new_g = (new_color >> 8) & 0xFF;
-    int new_b = new_color & 0xFF;
+    unsigned int inv_a = 0xFF - base.a;
+    unsigned int alpha_blend = new.a * inv_a;
+    unsigned int out_a = base.a + (alpha_blend >> 8);
 
-    int out_a = base_a + (new_a * (255 - base_a) / 255);
-    int out_r = (base_r * base_a + new_r * new_a * (255 - base_a) / 255) / out_a;
-    int out_g = (base_g * base_a + new_g * new_a * (255 - base_a) / 255) / out_a;
-    int out_b = (base_b * base_a + new_b * new_a * (255 - base_a) / 255) / out_a;
+    if (out_a == 0)
+        return (0xFF000000);
+
+    unsigned int out_r = (base.r * base.a + new.r * (alpha_blend >> 8)) / out_a;
+    unsigned int out_g = (base.g * base.a + new.g * (alpha_blend >> 8)) / out_a;
+    unsigned int out_b = (base.b * base.a + new.b * (alpha_blend >> 8)) / out_a;
 
     return (out_a << 24) | (out_r << 16) | (out_g << 8) | out_b;
 }
 
-
-void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
+void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, t_color color)
 {
 	int				x;
 	int				y;
@@ -51,10 +48,10 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 		while (y < size.y)
 		{
 			i = x + y * img->line_len / img->byte_depth;
-			if (GLASS)
-				pixels[i] = color;
+			if (!GLASS)
+				pixels[i] = blend_colors(color_argb(pixels[i]), color);
 			else
-				pixels[i] = blend_colors(pixels[i], color);
+				pixels[i] = int_argb(color);
 			y++;
 		}
 		x++;

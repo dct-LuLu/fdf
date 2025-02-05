@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/05 18:38:25 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/05 20:09:16 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,9 @@ GLASS		= 0
 DEBUG		= 0
 
 CC			= cc
-#-fsanitize=thread -fno-omit-frame-pointer
 
-CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast -g3
+CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast 
+#-g3
 CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) \
 			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
@@ -66,7 +66,7 @@ vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
 #SRCS		= better_alsa_faders.c
-SRCS		= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c better_alsa_faders.c osci.c
+SRCS		= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c better_alsa_faders.c osci.c color.c
 #main.c audio_utils.c img_utils.c mlx.c mlx_hooks.c vec2.c
 
 SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))

@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math_utils.c                                       :+:      :+:    :+:   */
+/*   color.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/11 22:31:21 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 19:50:50 by jaubry--         ###   ########.fr       */
+/*   Created: 2025/02/05 19:48:44 by jaubry--          #+#    #+#             */
+/*   Updated: 2025/02/05 21:14:40 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#ifndef COLOR_H
+# define COLOR_H
 
-int	abs(int x)
+typedef struct s_color
 {
-	if (x < 0)
-		return (-x);
-	return (x);
-}
+	unsigned int	a;
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
+}	t_color;
 
-t_line	get_line_data(t_vec2 a, t_vec2 b)
-{
-	t_line	line;
+t_color	new_color(unsigned int a, unsigned int r, unsigned int g, unsigned int b);
 
-	line.dx = abs(b.x - a.x);
-	line.dy = -abs(b.y - a.y);
-	line.sx = (b.x > a.x) - (b.x < a.x);
-	line.sy = (b.y > a.y) - (b.y < a.y);
-	line.err = line.dx + line.dy;
-	return (line);
-}
+t_color	color_rgb(unsigned int color);
+
+t_color	color_argb(unsigned int color);
+
+unsigned int	int_rgb(t_color color);
+
+unsigned int	int_argb(t_color color);
+
+#endif

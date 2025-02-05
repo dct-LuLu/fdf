@@ -6,13 +6,14 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/29 20:58:57 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 20:01:10 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MLX_UTILS_H
 # define MLX_UTILS_H
 # include "vec2.h"
+# include "color.h"
 # include "audio_utils.h"
 # include <stdlib.h>
 # include <stdbool.h>

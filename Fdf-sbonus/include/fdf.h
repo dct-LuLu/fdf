@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/29 23:13:45 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:07:20 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <math.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
+# include "vec2.h"
+# include "color.h"
 # ifndef WIDTH
 #  define WIDTH 500
 # endif
@@ -34,12 +36,6 @@ extern volatile sig_atomic_t	stop;
 extern pthread_mutex_t			audio_mutex;
 extern int16_t					*buffer;
 extern size_t					buf_len;
-
-typedef struct s_vec2
-{
-	int	x;
-	int	y;
-}	t_vec2;
 
 typedef struct s_img
 {
@@ -69,16 +65,13 @@ typedef struct s_line
 	int	e2;
 }	t_line;
 
-t_vec2	new_vec2(int x, int y);
-
 t_line	get_line_data(t_vec2 a, t_vec2 b);
 int		abs(int x);
-int		argb(int a, int r, int g, int b);
 
 t_img	init_img(void *mlx, int width, int height);
 void	ft_mlx_pixel_put(t_img *data, t_vec2 pos, int color);
 void	ft_mlx_line_put(t_img *data, t_vec2 a, t_vec2 b, int color);
-void	ft_mlx_batch_put(t_img *data, t_vec2 pos, t_vec2 size, int color);
+void	ft_mlx_batch_put(t_img *data, t_vec2 pos, t_vec2 size, t_color color);
 
 int		kill_mlx(t_env *env);
 int		on_keypress(int keysym, t_env *env);
