@@ -6,13 +6,13 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/05 18:50:02 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/06 23:53:33 by jaubry--         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 SHELL := /bin/bash
 
-ifeq ($(filter bonus sbonus clean fclean,$(MAKECMDGOALS)),)
+ifeq ($(filter bonus sbonus audio clean fclean,$(MAKECMDGOALS)),)
     include Fdf/fdf.mk
 endif
 
@@ -48,7 +48,7 @@ HEIGHT		= 1000
 DEBUG		= 0
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror 
+CFLAGS		= -Wall -Wextra -Werror
 CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
@@ -68,6 +68,9 @@ all: $(NAME)
 
 sbonus:
 	@$(MAKE) -s -C Fdf-sbonus
+
+audio:
+	@$(MAKE) -s -C Fdf-sbonus audio
 
 $(NAME): $(MLX) $(LIBFT) $(OBJS)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"
