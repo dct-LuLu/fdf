@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 23:50:14 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/07 00:17:37 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, t_color color)
 		while (y < size.y)
 		{
 			i = x + y * img->line_len / img->byte_depth;
-			if (!GLASS)
-				pixels[i] = blend_colors(color_argb(pixels[i]), color);
-			else
-				pixels[i] = int_argb(color);
+			//if (!GLASS)
+			//	pixels[i] = blend_colors(color_argb(pixels[i]), color);
+			//else
+	
+			pixels[i] = int_argb(color);
 			y++;
 		}
 		x++;
@@ -67,12 +68,15 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, t_color color)
 */
 void	ft_mlx_pixel_put(t_img *img, t_vec2 pos, int color)
 {
-	int	offset;
+	int				offset;
+	unsigned int	*pixel;
 
-	if (pos.x >= 0 && pos.x < img->width && pos.y >= 0 && pos.y < img->height)
+	if ((pos.x >= 0) && (pos.x < img->width) \
+	&& (pos.y >= 0) && (pos.y < img->height))
 	{
 		offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
-		*(unsigned int *)(img->addr + offset) = color;
+		pixel = (unsigned int *)(img->addr + offset);
+		*pixel = color;
 	}
 }
 

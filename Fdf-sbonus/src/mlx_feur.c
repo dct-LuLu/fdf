@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 23:40:33 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/07 00:24:32 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_vec2	z = (t_vec2){0, 0};
 t_vec2  s = (t_vec2){WIDTH, HEIGHT};
-t_color c = (t_color){1, 0, 0, 0};
+t_color c = (t_color){12, 0, 0, 0};
 //int	c = 0x12000000;
 
 int	draw(t_env *env)

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 23:51:24 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/07 00:28:26 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,21 +114,15 @@ void rainbow_transition(unsigned int* argb, float hue_increment)
     *argb = hsv_to_argb(h, s, v);
 }
 
-unsigned int color = 0xFF0000FF; // Starting with pure red (ARGB format)
+unsigned int color = 0x00FFFFFF; // Starting with pure red (ARGB format)
 float hue_increment = 0.3f; // Change the hue by 1 degree each time
 
-// Transition the color
 
 void	draw_osci(t_env env)
 {
     size_t  i;
     t_vec2  pos;
-    /*
-    t_vec2  old;
 
-    old.x = 0;
-    old.y = 0;
-    */
     i = 0;
     pthread_mutex_lock(&audio_mutex);
     if (DEBUG)
@@ -144,12 +138,7 @@ void	draw_osci(t_env env)
             half.x - (half.x * ((float)(buffer[i]) / MAX_SAMPLE)),
             half.y - (half.y * ((float)(buffer[i + 1]) / MAX_SAMPLE))
         );
-        
-        //if (old.x && old.y)
-        //    ft_mlx_line_put(&env.img, old, pos, argb(255, 0, 255, 0));
-        //old = pos;
-	
-        ft_mlx_pixel_put(&env.img, pos, 0x00FF00FF);
+        ft_mlx_pixel_put(&env.img, pos, color);
         i += 2;
     }
     pthread_mutex_unlock(&audio_mutex);
