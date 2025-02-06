@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 21:38:27 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 23:50:14 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ unsigned int blend_colors(t_color base, t_color new)
 {
     if (base.a == 0xFF)
         return (0xFF000000);
+	//else
+    //	ft_printf("base a %d\n", base.a);
 
     unsigned int inv_a = 0xFF - base.a;
     unsigned int alpha_blend = new.a * inv_a;

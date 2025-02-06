@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/05 20:09:16 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/06 23:53:18 by jaubry--         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,9 +24,11 @@ RESET		= \e[0m
 
 # Directories
 INCDIR		= include
-#SRCDIR		= src
-#SRCDIR		= audio_tests
-SRCDIR		= testo
+ifeq ($(MAKECMDGOALS), audio)
+	SRCDIR	= audio_tests
+else
+	SRCDIR	= src
+endif
 OBJDIR		= ../.obj/$(SRCDIR)
 DEPDIR		= ../.dep/$(SRCDIR)
 LIBFTDIR	= ../libft
@@ -42,13 +44,13 @@ WIDTH		= 1000
 HEIGHT		= 1000
 GLASS		= 0
 DEBUG		= 0
+RAINBOW		= 0
 
 CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast 
-#-g3
 CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) \
-			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS)
+			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS) -D RAINBOW=$(RAINBOW)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
 IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) \
 			  -I$(PAINSTALL)/include -I/usr/include/pipewire-0.3 \
@@ -65,15 +67,20 @@ vpath %.h $(LIBFTDIR)/$(INCDIR) $(MLXDIR) $(INCDIR)
 vpath %.o $(OBJDIR) $(LIBFTDIR)/$(OBJDIR)
 vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 
-#SRCS		= better_alsa_faders.c
-SRCS		= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c better_alsa_faders.c osci.c color.c
-#main.c audio_utils.c img_utils.c mlx.c mlx_hooks.c vec2.c
+ifeq ($(MAKECMDGOALS), audio)
+	SRCS	= pulseaudio_faders.c
+else
+	SRCS	= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c \
+			  better_alsa_faders.c osci.c color.c
+endif
 
 SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.c=.d)))
 
 all: $(NAME)
+
+audio: $(NAME)
 
 $(NAME): $(LIBFT) $(MLX) $(OBJS)
 	@echo -e "$(BLUE)Creating program $(UNDERLINE)$(NAME)$(RESET)$(BLUE)...$(RESET)"

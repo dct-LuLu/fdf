@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   better_alsa_faders.c                               :+:      :+:    :+:   */
+/*   pulseaudio_faders.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:42:39 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/30 03:27:18 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:09:21 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,14 @@
 #include <signal.h>
 #include <pthread.h>
 #include "libft.h"
+#include "audio_tests.h"
 
-#define SAMPLE_RATE 48000
-#define CHANNELS 2
-#define BUFFER_DURATION_MS 1
-#define GAUGE_WIDTH 120  // The width of the gauge (number of characters)
-#define MIN_DB -60     // Minimum dBFS (for silence, or the lowest visible level)
-#define MAX_DB 0       // Maximum dBFS (representing 0 dBFS, the maximum level)
-#define MAX_SAMPLE 32768.0
-
-static pa_mainloop *mainloop = NULL;
-static pa_mainloop_api *mainloop_api = NULL;
-static pa_context *context = NULL;
-static pa_stream *stream = NULL;
+/*
+	static pa_mainloop		*mainloop = NULL;
+	static pa_mainloop_api	*mainloop_api = NULL;
+	static pa_context		*context = NULL;
+	static pa_stream		*stream = NULL;
+*/
 
 volatile sig_atomic_t	stop = 0;
 
@@ -86,21 +81,20 @@ void display_dBfs_gauge(double peak_dbfs)
     // Calculate the number of "bars" (segments) for the gauge
     int num_bars = (int)(scale * GAUGE_WIDTH);  // The number of characters to represent the level
 
-    // Display the gauge
     printf("[");
     for (int i = 0; i < GAUGE_WIDTH; i++)
     {
         if (i < num_bars)
-            printf("#");  // Active bar
+            printf("#");
         else
-            printf(" ");  // Empty space
+            printf(" ");
     }
     printf("] %.2f peak dBFS\n", peak_dbfs);
 }
 
 void stream_read_callback(pa_stream *s, size_t buf_size, void *userdata)
 {
-    (void)userdata;  // Suppress unused parameter warning
+    (void)userdata;
 
     int16_t *data;
     size_t buf_len = buf_size / sizeof(int16_t);
@@ -137,7 +131,8 @@ void stream_read_callback(pa_stream *s, size_t buf_size, void *userdata)
 
 void context_state_callback(pa_context *c, void *userdata)
 {
-    (void)userdata;  // Suppress unused parameter warning
+	t_pa *pa;
+    pa = (t_pa*)userdata;  // Suppress unused parameter warning
 
     pa_context_state_t state = pa_context_get_state(c);
 
@@ -148,32 +143,32 @@ void context_state_callback(pa_context *c, void *userdata)
             .rate = SAMPLE_RATE,
             .channels = CHANNELS
         };
-        const char *monitor_source_name = "alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K7-00.analog-stereo.monitor";
+        const char *monitor_source_name = DEVICE;
 
-        // Create and configure the stream for recording from the monitor source
-        stream = pa_stream_new(c, "Audio Capture", &sample_spec, NULL);
-        if (!stream)
+        // Create and configure the pa.stream for recording from the monitor source
+        pa->stream = pa_stream_new(c, "Audio Capture", &sample_spec, NULL);
+        if (!pa->stream)
         {
-            fprintf(stderr, "Failed to create stream\n");
-            pa_mainloop_quit(mainloop, 0);
+            ft_dprintf(STDERR_FILENO, "Failed to create pa.stream\n");
+            pa_mainloop_quit(pa->loop, 0);
             return;
         }
 
-        // Set the read callback for the stream
-        pa_stream_set_read_callback(stream, stream_read_callback, NULL);
+        // Set the read callback for the pa.stream
+        pa_stream_set_read_callback(pa->stream, stream_read_callback, NULL);
 
-        // Connect the stream to the specific monitor source
-        if (pa_stream_connect_record(stream, monitor_source_name, NULL, PA_STREAM_NOFLAGS) < 0)
+        // Connect the pa.stream to the specific monitor source
+        if (pa_stream_connect_record(pa->stream, monitor_source_name, NULL, PA_STREAM_NOFLAGS) < 0)
         {
-            fprintf(stderr, "Failed to connect to monitor source: %s\n", pa_strerror(pa_context_errno(c)));
-            pa_mainloop_quit(mainloop, 0);
+            ft_dprintf(STDERR_FILENO, "Failed to connect to monitor source: %s\n", pa_strerror(pa_context_errno(c)));
+            pa_mainloop_quit(pa->loop, 0);
             return;
         }
     }
     else if (state == PA_CONTEXT_FAILED || state == PA_CONTEXT_TERMINATED)
     {
-        fprintf(stderr, "PulseAudio context failed or terminated.\n");
-        pa_mainloop_quit(mainloop, 0);
+        ft_dprintf(STDERR_FILENO, "PulseAudio context failed or terminated.\n");
+        pa_mainloop_quit(pa->loop, 0);
         exit(0);
     }
     else if (state == PA_CONTEXT_CONNECTING)
@@ -184,49 +179,48 @@ void context_state_callback(pa_context *c, void *userdata)
 
 void	*snd(void *args)
 {
+	t_pa	*pa;
 	(void)args;
 	int	*ret;
 
+	pa = NULL;
 	ret = malloc(sizeof(int));
-    // Initialize the PulseAudio mainloop and context
-    mainloop = pa_mainloop_new();
-    mainloop_api = pa_mainloop_get_api(mainloop);
-    context = pa_context_new(mainloop_api, "PulseAudio Recording Example");
+    pa->loop = pa_mainloop_new();
+    pa->api = pa_mainloop_get_api(pa->loop);
+    pa->ctx = pa_context_new(pa->api, "PulseAudio Recording Example");
 
-    if (!context)
+    if (!pa->ctx)
     {
-        fprintf(stderr, "Failed to create PulseAudio context\n");
+        ft_dprintf(STDERR_FILENO, "Failed to create PulseAudio context\n");
         *ret = 1;
         return ((void*)ret);
     }
 
-    // Set the context state callback
-    pa_context_set_state_callback(context, context_state_callback, NULL);
+    // Set the pa.ctx state callback
+    pa_context_set_state_callback(pa->ctx, context_state_callback, NULL);
 
     // Connect to the PulseAudio server
-    if (pa_context_connect(context, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL) < 0)
+    if (pa_context_connect(pa->ctx, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL) < 0)
     {
-        fprintf(stderr, "Failed to connect to PulseAudio server: %s\n", pa_strerror(pa_context_errno(context)));
+        ft_dprintf(STDERR_FILENO, "Failed to connect to PulseAudio server: %s\n", pa_strerror(pa_context_errno(pa->ctx)));
         *ret = 1;
         return ((void*)ret);
     }
 
-    // Run the mainloop
     while (!stop)
     {
-    	int err = pa_mainloop_iterate(mainloop, 0, NULL);//pa_mainloop_run(mainloop, NULL);
+    	int err = pa_mainloop_iterate(pa->loop, 0, NULL);
     	if (err < 0)
     	{
-        	fprintf(stderr, "Mainloop failed\n");
+        	ft_dprintf(STDERR_FILENO, "Mainloop failed\n");
         	break;
     	}
     }
 
-    // Clean up
     printf("Exiting program...\n");
-    pa_stream_unref(stream);
-    pa_context_unref(context);
-    pa_mainloop_free(mainloop);
+    pa_stream_unref(pa->stream);
+    pa_context_unref(pa->ctx);
+    pa_mainloop_free(pa->loop);
 
 	*ret = 0;
     return ((void*)ret);

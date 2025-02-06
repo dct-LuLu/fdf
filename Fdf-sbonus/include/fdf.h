@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 21:07:20 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 23:50:53 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 # endif
 # ifndef DEBUG
 #  define DEBUG 0
+# endif
+# ifndef RAINBOW
+#  define RAINBOW 0
 # endif
 # include <signal.h>
 # include <pthread.h>

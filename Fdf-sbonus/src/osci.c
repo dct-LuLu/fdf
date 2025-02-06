@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   osci.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 21:43:36 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 23:51:24 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,8 @@ void	draw_osci(t_env env)
 	    draw_osci_side(env, half, 0);
     	draw_osci_side(env, half, 1);
     }
-    rainbow_transition(&color, hue_increment);
+	if (RAINBOW)
+    	rainbow_transition(&color, hue_increment);
     while (i < buf_len)
     {
         pos = new_vec2(
@@ -148,7 +149,7 @@ void	draw_osci(t_env env)
         //    ft_mlx_line_put(&env.img, old, pos, argb(255, 0, 255, 0));
         //old = pos;
 	
-        ft_mlx_pixel_put(&env.img, pos, color);
+        ft_mlx_pixel_put(&env.img, pos, 0x00FF00FF);
         i += 2;
     }
     pthread_mutex_unlock(&audio_mutex);
