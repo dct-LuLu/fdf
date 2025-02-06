@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_utils.c                                        :+:      :+:    :+:   */
+/*   mlx_draw_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 16:31:14 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 20:38:43 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,21 @@ void	ft_mlx_pixel_put(t_img *img, t_vec2 pos, int color)
 }
 
 /*
+	Function that initializes the necessary data for the line drawing function
+*/
+static t_line	get_line_data(t_vec2 a, t_vec2 b)
+{
+	t_line	line;
+
+	line.dx = abs(b.x - a.x);
+	line.dy = -abs(b.y - a.y);
+	line.sx = (b.x > a.x) - (b.x < a.x);
+	line.sy = (b.y > a.y) - (b.y < a.y);
+	line.err = line.dx + line.dy;
+	return (line);
+}
+
+/*
 	Function for line_put logic, to increment the current pixel draw pos.
 */
 static void	incr_line(int *pos, int *err, int d, int s)
@@ -91,34 +106,4 @@ void	ft_mlx_line_put(t_img *img, t_vec2 a, t_vec2 b, int color)
 			incr_line(&a.y, &line.err, line.dx, line.sy);
 		}
 	}
-}
-
-/*
-	Function to init image with given size, will init it's metadata too.
-*/
-t_img	init_img(void *mlx, int width, int height)
-{
-	t_img	img;
-
-	img.img = mlx_new_image(mlx, width, height);
-	img.addr = mlx_get_data_addr(img.img, &img.byte_depth,
-			&img.line_len, &img.endian);
-	img.byte_depth /= 8;
-	img.width = width;
-	img.height = height;
-	return (img);
-}
-
-void	kill_img(void *mlx, t_img *img)
-{
-	if (img->img)
-	{
-		mlx_destroy_image(mlx, img->img);
-		img->img = NULL;
-	}
-	if (img->addr)
-		img->addr = NULL;
-	img->byte_depth = 0;
-	img->width = 0;
-	img->height = 0;
 }

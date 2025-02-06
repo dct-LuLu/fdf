@@ -6,13 +6,15 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 20:09:05 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/06 16:14:33 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 # include "libft.h"
+# include "vec2.h"
+# include "vec3.h"
 # include <mlx.h>
 # include <math.h>
 # include <X11/X.h>
@@ -26,19 +28,6 @@
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
-
-typedef struct s_vec2
-{
-	int	x;
-	int	y;
-}	t_vec2;
-
-typedef struct s_vec3
-{
-	int	x;
-	int	y;
-	int	z;
-}	t_vec3;
 
 typedef struct s_pixel
 {
@@ -75,6 +64,8 @@ typedef struct s_env
 	void	*win;
 	t_img	img;
 	t_map	map;
+	t_vec2	origin;
+	t_vec2	size;
 }	t_env;
 
 typedef struct s_line
@@ -87,11 +78,7 @@ typedef struct s_line
 	int	e2;
 }	t_line;
 
-t_vec2	new_vec2(int x, int y);
-t_vec3	new_vec3(int x, int y, int z);
-
-t_line	get_line_data(t_vec2 a, t_vec2 b);
-int		argb(int a, int r, int g, int b);
+int		rgb(int r, int g, int b);
 t_vec2	iso(t_vec3 point);
 int		abs(int x);
 

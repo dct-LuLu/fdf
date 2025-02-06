@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:10:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 20:34:22 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/06 14:53:13 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@ void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 	t_vec2	p1;
 	t_vec2	p2;
 
-	p = map.proj(arrange(get_point_cords(map, x, y), map));
+	p = iso(arrange(get_point_cords(map, x, y), map));
 	center(&p, map);
 	if (x + 1 < map.width)
 	{
-		p1 = map.proj(arrange(get_point_cords(map, x + 1, y), map));
+		p1 = iso(arrange(get_point_cords(map, x + 1, y), map));
 		center(&p1, map);
 		if (map.map[y][x].color && map.map[y][x + 1].color)
 			ft_mlx_line_put(&img, p, p1, map.map[y][x].color);
 		else
-			ft_mlx_line_put(&img, p, p1, argb(0, 255, 0, 0));
+			ft_mlx_line_put(&img, p, p1, 0xFF0000);
 	}
 	if (y + 1 < map.height)
 	{
-		p2 = map.proj(arrange(get_point_cords(map, x, y + 1), map));
+		p2 = iso(arrange(get_point_cords(map, x, y + 1), map));
 		center(&p2, map);
 		if (map.map[y][x].color && map.map[y + 1][x].color)
 			ft_mlx_line_put(&img, p, p2, map.map[y][x].color);
 		else
-			ft_mlx_line_put(&img, p, p2, argb(0, 255, 0, 0));
+			ft_mlx_line_put(&img, p, p2, 0xFF0000);
 	}
 }
 

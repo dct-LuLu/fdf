@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:03:34 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/11 22:35:24 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:21:51 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,3 @@ int	hex_to_int(char *hex)
 	}
 	return (num);
 }
-
-/*
-int	main(void)
-{
-	char	*str = "0x458FF";
-
-	printf("%s = %d\n", str, hex_to_int(format_hex(str)));
-}
-*/

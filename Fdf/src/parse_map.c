@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 04:13:28 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/14 19:43:55 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/06 18:22:42 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_map	init_map(char *file)
 	t_map	map;
 	int		fd;
 
+	map = (t_map){0};
 	fd = check_open(file);
 	map.width = get_map_width(fd);
 	if (!map.width)
@@ -135,41 +136,3 @@ static void	populate_map(int fd, t_map *map)
 	set_pixel_map(fd, map);
 	close(fd);
 }
-
-/*
-#include <stdio.h>
-static void	print_map(t_map map)
-{
-	size_t	x;
-	size_t	y;
-
-	y = 0;
-	while (y < map.height)
-	{
-		x = 0;
-		while (x < map.width)
-		{
-			if (map.map[y][x].color)
-				printf("%d,%X ", map.map[y][x].z, map.map[y][x].color);
-			else
-				printf("%d ", map.map[y][x].z);
-			x++;
-		}
-		printf("\n");
-		y++;
-	}
-}
-
-int	main(int argc, char **argv)
-{
-	t_map	map;
-
-	if (argc == 2)
-	{
-		map = init_map(argv[1]);
-		print_map(map);
-		free_map(map.map, map.height);
-	}
-	return (0);
-}
-*/

@@ -6,12 +6,15 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:32:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/12/16 19:49:22 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 20:40:42 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/*
+	Function that kills mlx and returns.
+*/
 int	kill(t_env *env)
 {
 	free_map(env->map.map, env->map.height);
@@ -23,6 +26,10 @@ int	kill(t_env *env)
 	return (0);
 }
 
+/*
+	Function that handles keyboard inputs 
+	(arrows and zfac control)
+*/
 static int	controls(int keysym, t_env *env)
 {
 	if (keysym == 65361)
@@ -42,6 +49,9 @@ static int	controls(int keysym, t_env *env)
 	return (0);
 }
 
+/*
+	Function that handles keyboard inputs 
+*/
 int	on_keypress(int keysym, t_env *env)
 {
 	if (DEBUG)
@@ -65,6 +75,9 @@ int	on_keypress(int keysym, t_env *env)
 	return (0);
 }
 
+/*
+	Function that handles mouse inputs
+*/
 int	mouse_handler(int mousecode, int x, int y, t_env *env)
 {
 	if (DEBUG)

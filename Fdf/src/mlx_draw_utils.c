@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_utils.c                                        :+:      :+:    :+:   */
+/*   mlx_draw_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 16:34:33 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:21:29 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /*
 	Function that draws a square.
 */
+
 void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
 	int				x;
@@ -45,11 +46,27 @@ void	ft_mlx_pixel_put(t_img *img, t_vec2 pos, int color)
 {
 	int	offset;
 
-	if (pos.x >= 0 && pos.x < img->width && pos.y >= 0 && pos.y < img->height)
+	if ((pos.x >= 0) && (pos.x < img->width) \
+	&& (pos.y >= 0) && (pos.y < img->height))
 	{
 		offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
 		*(unsigned int *)(img->addr + offset) = color;
 	}
+}
+
+/*
+	Function that initializes the necessary data for the line drawing function
+*/
+static t_line	get_line_data(t_vec2 a, t_vec2 b)
+{
+	t_line	line;
+
+	line.dx = abs(b.x - a.x);
+	line.dy = -abs(b.y - a.y);
+	line.sx = (b.x > a.x) - (b.x < a.x);
+	line.sy = (b.y > a.y) - (b.y < a.y);
+	line.err = line.dx + line.dy;
+	return (line);
 }
 
 /*
@@ -90,34 +107,4 @@ void	ft_mlx_line_put(t_img *img, t_vec2 a, t_vec2 b, int color)
 			incr_line(&a.y, &line.err, line.dx, line.sy);
 		}
 	}
-}
-
-/*
-	Function to init image with given size, will init it's metadata too.
-*/
-t_img	init_img(void *mlx, int width, int height)
-{
-	t_img	img;
-
-	img.img = mlx_new_image(mlx, width, height);
-	img.addr = mlx_get_data_addr(img.img, &img.byte_depth,
-			&img.line_len, &img.endian);
-	img.byte_depth /= 8;
-	img.width = width;
-	img.height = height;
-	return (img);
-}
-
-void	kill_img(void *mlx, t_img *img)
-{
-	if (img->img)
-	{
-		mlx_destroy_image(mlx, img->img);
-		img->img = NULL;
-	}
-	if (img->addr)
-		img->addr = NULL;
-	img->byte_depth = 0;
-	img->width = 0;
-	img->height = 0;
 }
