@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 23:50:53 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/07 00:58:37 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		abs(int x);
 t_img	init_img(void *mlx, int width, int height);
 void	ft_mlx_pixel_put(t_img *data, t_vec2 pos, int color);
 void	ft_mlx_line_put(t_img *data, t_vec2 a, t_vec2 b, int color);
-void	ft_mlx_batch_put(t_img *data, t_vec2 pos, t_vec2 size, t_color color);
+void	ft_mlx_batch_put(t_img *data, t_vec2 pos, t_vec2 size, int color);
 
 int		kill_mlx(t_env *env);
 int		on_keypress(int keysym, t_env *env);

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/07 00:28:26 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/07 01:56:23 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,11 @@ void rainbow_transition(unsigned int* argb, float hue_increment)
     *argb = hsv_to_argb(h, s, v);
 }
 
-unsigned int color = 0x00FFFFFF; // Starting with pure red (ARGB format)
-float hue_increment = 0.3f; // Change the hue by 1 degree each time
+//int color = 0x2900ff00;//0x00ff0029;
+//int	color = 0x00FFFF29;
+int	color = 0x00FF00;
+//int	color = 0xff00ff00;
+float hue_increment = 0.3f;
 
 
 void	draw_osci(t_env env)
@@ -130,8 +133,8 @@ void	draw_osci(t_env env)
 	    draw_osci_side(env, half, 0);
     	draw_osci_side(env, half, 1);
     }
-	if (RAINBOW)
-    	rainbow_transition(&color, hue_increment);
+	//if (RAINBOW)
+    //	rainbow_transition(&color, hue_increment);
     while (i < buf_len)
     {
         pos = new_vec2(

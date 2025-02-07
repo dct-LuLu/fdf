@@ -6,34 +6,13 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/07 00:17:37 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/07 01:22:58 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-unsigned int blend_colors(t_color base, t_color new)
-{
-    if (base.a == 0xFF)
-        return (0xFF000000);
-	//else
-    //	ft_printf("base a %d\n", base.a);
-
-    unsigned int inv_a = 0xFF - base.a;
-    unsigned int alpha_blend = new.a * inv_a;
-    unsigned int out_a = base.a + (alpha_blend >> 8);
-
-    if (out_a == 0)
-        return (0xFF000000);
-
-    unsigned int out_r = (base.r * base.a + new.r * (alpha_blend >> 8)) / out_a;
-    unsigned int out_g = (base.g * base.a + new.g * (alpha_blend >> 8)) / out_a;
-    unsigned int out_b = (base.b * base.a + new.b * (alpha_blend >> 8)) / out_a;
-
-    return (out_a << 24) | (out_r << 16) | (out_g << 8) | out_b;
-}
-
-void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, t_color color)
+void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {
 	int				x;
 	int				y;
@@ -50,11 +29,7 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, t_color color)
 		while (y < size.y)
 		{
 			i = x + y * img->line_len / img->byte_depth;
-			//if (!GLASS)
-			//	pixels[i] = blend_colors(color_argb(pixels[i]), color);
-			//else
-	
-			pixels[i] = int_argb(color);
+			pixels[i] = color;
 			y++;
 		}
 		x++;

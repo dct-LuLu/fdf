@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 20:38:43 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/07 01:08:14 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 */
 void	ft_mlx_pixel_put(t_img *img, t_vec2 pos, int color)
 {
-	int	offset;
+	int				offset;
+	unsigned int	*pixel;
 
-	if (pos.x >= 0 && pos.x < img->width && pos.y >= 0 && pos.y < img->height)
+	if ((pos.x >= 0) && (pos.x < img->width) \
+	&& (pos.y >= 0) && (pos.y < img->height))
 	{
 		offset = ((pos.y * img->line_len) + (pos.x * img->byte_depth));
-		*(unsigned int *)(img->addr + offset) = color;
+		pixel = (unsigned int *)(img->addr + offset);
+		*pixel = color;
 	}
 }
 
