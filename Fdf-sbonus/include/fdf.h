@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/07 00:58:37 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/08 07:56:15 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ typedef struct s_env
 	void	*mlx;
 	void	*win;
 	t_img	img;
+	t_vec2	origin;
+	t_vec2	size;
+	size_t	tick;
 }	t_env;
 
 typedef struct s_line
@@ -67,6 +70,8 @@ typedef struct s_line
 	int	err;
 	int	e2;
 }	t_line;
+
+void rainbow_transition(unsigned int* argb, unsigned int hue_increment);
 
 t_line	get_line_data(t_vec2 a, t_vec2 b);
 int		abs(int x);

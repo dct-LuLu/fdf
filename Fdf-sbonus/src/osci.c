@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/07 02:50:13 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/08 07:55:59 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	draw_osci_side(t_env env, t_vec2 half, int channel)
 	}
 }
 
+/*
 #include <math.h>
 
 // Function to convert ARGB to HSV
@@ -113,13 +114,14 @@ void rainbow_transition(unsigned int* argb, float hue_increment)
     // Convert back to ARGB
     *argb = hsv_to_argb(h, s, v);
 }
+*/
 
 //int color = 0x2900ff00;//0x00ff0029;
-unsigned int	color = 0x00FFFF29;
+unsigned int	color = 0x0000FF19; //GREEN BLUEISH
+//unsigned int	color = 0x00A92299; //PINK
 //int	color = 0x00FF00;
 //int	color = 0xff00ff00;
-float hue_increment = 0.25f;
-
+unsigned int	hue_increment = 1;
 
 void	draw_osci(t_env env)
 {
@@ -133,7 +135,7 @@ void	draw_osci(t_env env)
 	    draw_osci_side(env, half, 0);
     	draw_osci_side(env, half, 1);
     }
-	if (RAINBOW)
+	if (RAINBOW && ((env.tick % 10) == 0))
     	rainbow_transition(&color, hue_increment);
     while (i < buf_len)
     {

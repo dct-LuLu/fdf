@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:42:39 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/05 18:31:36 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/08 01:05:08 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,10 @@ void	pa_quit(void)
 
 int	th_mlx__th_pa(void)
 {
-    //pthread_t	th_audio;
+	//pthread_t	th_audio;
 	pthread_t	th_mlx;
-    int			*ret_audio;
-    int			*ret_mlx;
+	int			*ret_audio;
+	int			*ret_mlx;
 
     ret_mlx = malloc(sizeof(int));
     ret_audio = malloc(sizeof(int));
@@ -217,7 +217,7 @@ int main(void)
         The context_state_callback function initializes the audio capture when the context is ready.
 
     Audio Processing:
-        The stream_read_callback function processes the audio in chunks, calculates the RMS and peak dB levels for both left and right channels, and displays the corresponding values using display_dBfs_gauge.
+        The stream_read_callback function processes the audio in chunks, calculates the RMS and peak dB levels for both left and right channels, and displays the corresponding values using display_dbfs_gauge.
 
     Error Handling:
         Error handling has been improved with appropriate checks for context state changes (e.g., failed or terminated state).
