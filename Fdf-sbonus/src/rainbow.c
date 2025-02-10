@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/09 10:51:46 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:32:38 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,17 +105,17 @@ static unsigned int	hsv_to_argb(float hsv[3], unsigned int alpha)
 }
 
 /*
-	Increment the argb value with the hue increment by transforming it into
+	Increment the argb value with the hue speed by transforming it into
 	hsv value to easily add to the 360 degree wide, Hue attribute.
 */
-void	rainbow_transition(unsigned int *argb, unsigned int hue_increment)
+void	rainbow_transition(unsigned int *argb)
 {
 	unsigned int	alpha;
 	float			hsv[3];
 
 	alpha = ((*argb) >> 24) & 0xFF;
 	argb_to_hsv(*argb, hsv);
-	hsv[H] += hue_increment;
+	hsv[H] += HUE_SPEED;
 	if (hsv[H] >= 360.0f)
 		hsv[H] -= 360;
 	*argb = hsv_to_argb(hsv, alpha);

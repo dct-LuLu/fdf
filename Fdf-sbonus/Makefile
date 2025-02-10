@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/08 07:20:47 by jaubry--         ###   ########lyon.fr    #
+#    Updated: 2025/02/10 20:19:53 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,8 +70,8 @@ vpath %.d $(DEPDIR) $(LIBFTDIR)/$(DEPDIR)
 ifeq ($(MAKECMDGOALS), audio)
 	SRCS	= pulseaudio_faders.c math_audio.c display_audio.c pa_utils.c
 else
-	SRCS	= mlx_feur.c mlx_utils.c vec2.c math_utils.c mlx_hooks.c \
-			  better_alsa_faders.c osci.c color.c rainbow.c
+	SRCS	= main.c mlx_draw_utils.c vec2.c math_utils.c mlx_hooks.c \
+			  better_alsa_faders.c mlx_draw.c rainbow.c img_utils.c
 endif
 
 SRCS		:=$(addprefix $(SRCDIR)/, $(SRCS))

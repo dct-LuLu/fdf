@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 01:06:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/10 17:22:05 by jaubry--         ###   ########.fr       */
+/*   Created: 2025/02/09 12:11:45 by jaubry--          #+#    #+#             */
+/*   Updated: 2025/02/10 20:11:54 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ t_img	init_img(void *mlx, int width, int height)
 {
 	t_img	img;
 
-	img.img = mlx_new_image(mlx, width, height);
+	if (GLASS)
+		img.img = mlx_new_image(mlx, width, height);
+	else
+		img.img = mlx_new_image_alpha(mlx, width, height);
+	if (!img.img)
+		return (img);
 	img.addr = mlx_get_data_addr(img.img, &img.byte_depth,
 			&img.line_len, &img.endian);
 	img.byte_depth /= 8;

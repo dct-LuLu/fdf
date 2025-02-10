@@ -6,12 +6,15 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:48:44 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/08 07:07:48 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/10 18:15:28 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RAINBOW_H
 # define RAINBOW_H
+# ifndef HUE_SPEED
+#  define HUE_SPEED 1
+# endif
 
 // RGB
 # define R 0 // Red
