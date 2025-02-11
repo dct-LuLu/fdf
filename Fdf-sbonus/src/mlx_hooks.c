@@ -6,42 +6,42 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:32:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/10 18:58:00 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:09:28 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "osci.h"
 
 /*
 	Function that safely kills the mlx instance.
 */
-int	kill_mlx(t_env *env)
+int	kill_mlx(t_mlx *mlx)
 {
-	if (env)
+	if (mlx)
 	{
-		if (env->mlx && env->img.img)
-			mlx_destroy_image(env->mlx, env->img.img);
-		if (env->mlx && env->win)
-			mlx_destroy_window(env->mlx, env->win);
-		if (env->mlx)
+		if (mlx->mlx && mlx->img.img)
+			mlx_destroy_image(mlx->mlx, mlx->img.img);
+		if (mlx->mlx && mlx->win)
+			mlx_destroy_window(mlx->mlx, mlx->win);
+		if (mlx->mlx)
 		{
-			mlx_destroy_display(env->mlx);
-			free(env->mlx);
+			mlx_destroy_display(mlx->mlx);
+			free(mlx->mlx);
 		}
-		free(env);
+		free(mlx);
 	}
-	pthread_mutex_lock(&stop_mutex);
-	stop = 1;
-	pthread_mutex_unlock(&stop_mutex);
+	pthread_mutex_lock(&g_stop_mutex);
+	g_stop = 1;
+	pthread_mutex_unlock(&g_stop_mutex);
 	return (0);
 }
 
 /*
 	Function to handles ESC key to exit safely.
 */
-int	on_keypress(int keysym, t_env *env)
+int	on_keypress(int keysym, t_mlx *mlx)
 {
 	if (keysym == 65307)
-		return (mlx_loop_end(env->mlx));
+		return (mlx_loop_end(mlx->mlx));
 	return (0);
 }

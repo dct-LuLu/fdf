@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx_utils.h"
 
 void	ft_mlx_batch_put(t_img *img, t_vec2 pos, t_vec2 size, int color)
 {

@@ -6,11 +6,11 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/10 20:19:16 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:02:12 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "osci.h"
 
 /*
 	Debug function that draws ontop of the main oscilloscope, on the
@@ -18,7 +18,7 @@
 	This oscilloscope reprents value as y coordinates and
 	x is the time.
 */
-static void	draw_osci_side(t_env env, t_vec2 half, t_vec2 quarter, int channel)
+static void	draw_osci_side(t_env *env, t_vec2 half, t_vec2 quarter, int channel)
 {
 	size_t	i;
 	int		x;
@@ -27,15 +27,21 @@ static void	draw_osci_side(t_env env, t_vec2 half, t_vec2 quarter, int channel)
 	int		offset;
 
 	offset = quarter.y + (half.y * channel);
-	half_buf = (buf_len / 2);
+	half_buf = (env->buf_len / 2);
 	i = 0;
-	while (i < buf_len)
+	while (i < env->buf_len)
 	{
 		x = ((float)i / half_buf) * quarter.x;
-		y = offset - (quarter.y * ((float)buffer[i + channel] / MAX_SAMPLE));
-		ft_mlx_pixel_put(&env.img, new_vec2(x, y), 0xFF0000);
+		y = offset - (quarter.y * ((float)env->buffer[i + channel] / MAXPCM));
+		ft_mlx_pixel_put(&env->mlx->img, new_vec2(x, y), 0xFF0000);
 		i += 2;
 	}
+}
+
+static void	draw_debug(t_env *env)
+{
+	draw_osci_side(env, env->mlx->half, env->mlx->quarter, 0);
+	draw_osci_side(env, env->mlx->half, env->mlx->quarter, 1);
 }
 
 /*
@@ -46,29 +52,28 @@ static void	draw_osci_side(t_env env, t_vec2 half, t_vec2 quarter, int channel)
 */
 static void	draw_osci(t_env *env)
 {
+	t_mlx	*mlx;
 	size_t	i;
 	t_vec2	pos;
 
 	i = 0;
-	pthread_mutex_lock(&audio_mutex);
+	mlx = env->mlx;
+	pthread_mutex_lock(&env->buffer_mutex);
 	if (DEBUG)
-	{
-		draw_osci_side(*env, env->half, env->quarter, 0);
-		draw_osci_side(*env, env->half, env->quarter, 1);
-	}
-	if (RAINBOW && ((env->tick % 10) == 0))
-		rainbow_transition(&env->color);
-	while (i < buf_len)
+		draw_debug(env);
+	if (RAINBOW && ((mlx->tick % 10) == 0))
+		rainbow_transition(&mlx->color);
+	while (i < env->buf_len)
 	{
 		pos = (t_vec2)
 		{
-			env->half.x - (env->half.x * ((float)(buffer[i]) / MAX_SAMPLE)),
-			env->half.y - (env->half.y * ((float)(buffer[i + 1]) / MAX_SAMPLE))
+			mlx->half.x - (mlx->half.x * ((float)(env->buffer[i]) / MAXPCM)),
+			mlx->half.y - (mlx->half.y * ((float)(env->buffer[i + 1]) / MAXPCM))
 		};
-		ft_mlx_pixel_put(&env->img, pos, env->color);
+		ft_mlx_pixel_put(&env->mlx->img, pos, env->mlx->color);
 		i += 2;
 	}
-	pthread_mutex_unlock(&audio_mutex);
+	pthread_mutex_unlock(&env->buffer_mutex);
 }
 
 /*
@@ -81,25 +86,28 @@ static void	draw_osci(t_env *env)
 */
 int	draw_routine(t_env *env)
 {
-	env->tick += 1;
-	pthread_mutex_lock(&stop_mutex);
-	if (stop)
+	t_mlx	*mlx;
+
+	mlx = env->mlx;
+	mlx->tick += 1;
+	pthread_mutex_lock(&g_stop_mutex);
+	if (g_stop)
 	{
-		pthread_mutex_unlock(&stop_mutex);
-		mlx_loop_end(env->mlx);
+		pthread_mutex_unlock(&g_stop_mutex);
+		mlx_loop_end(mlx->mlx);
 	}
 	else
-		pthread_mutex_unlock(&stop_mutex);
+		pthread_mutex_unlock(&g_stop_mutex);
 	if (GLASS)
 	{
-		kill_img(env->mlx, &env->img);
-		env->img = init_img(env->mlx, WIDTH, HEIGHT);
-		if (!env->img.img || !env->img.addr)
+		kill_img(mlx->mlx, &mlx->img);
+		mlx->img = init_img(mlx->mlx, WIDTH, HEIGHT);
+		if (!mlx->img.img || !mlx->img.addr)
 			return (1);
 	}
 	else
-		ft_mlx_batch_put(&env->img, env->origin, env->size, BACKGROUND);
+		ft_mlx_batch_put(&mlx->img, mlx->origin, mlx->size, BACKGROUND);
 	draw_osci(env);
-	mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }

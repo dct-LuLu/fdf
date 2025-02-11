@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/10 21:07:45 by jaubry--         ###   ########.fr       */
+/*   Created: 2025/02/11 12:19:48 by jaubry--          #+#    #+#             */
+/*   Updated: 2025/02/11 17:56:30 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "osci.h"
 
-/*
-	Function that initializes the env.
-*/
 static t_env	*init_env(void)
 {
 	t_env	*env;
@@ -22,44 +19,30 @@ static t_env	*init_env(void)
 	env = ft_calloc(1, sizeof(t_env));
 	if (!env)
 		return (NULL);
-	env->mlx = mlx_init();
-	if (!env->mlx)
-		return (kill_mlx(env), NULL);
-	env->win = mlx_new_window(env->mlx, WIDTH, HEIGHT, "osci");
-	if (!env->win)
-		return (kill_mlx(env), NULL);
-	ft_bzero(&env->img, sizeof(t_img));
-	env->img = init_img(env->mlx, WIDTH, HEIGHT);
-	if (!env->img.img)
-		return (kill_mlx(env), NULL);
-	env->origin = (t_vec2){0, 0};
-	env->size = (t_vec2){WIDTH, HEIGHT};
-	env->half = (t_vec2){WIDTH / 2, HEIGHT / 2};
-	env->quarter = (t_vec2){WIDTH / 4, HEIGHT / 4};
-	env->color = DOT;
+	env->buffer = NULL;
+	env->buf_len = 0;
+	pthread_mutex_init(&env->buffer_mutex, NULL);
 	return (env);
 }
 
 /*
-	Function for the mlx_thread
+	Function that creates the audio and mlx thread and checks for any errors.
 */
-void	*mlx_thread(void *arg)
+int	main(void)
 {
-	t_env	*env;
-	int		*ret;
+	pthread_t	th_pa;
+	pthread_t	th_mlx;
+	int			error;
+	t_env		*env;
 
-	ret = (int *)arg;
 	env = init_env();
 	if (!env)
-	{
-		*ret = 1;
-		return (ret);
-	}
-	mlx_hook(env->win, DestroyNotify, StructureNotifyMask, &kill_mlx, env);
-	mlx_hook(env->win, KeyRelease, KeyReleaseMask, &on_keypress, env);
-	mlx_loop_hook(env->mlx, &draw_routine, env);
-	mlx_loop(env->mlx);
-	kill_mlx(env);
-	*ret = 0;
-	return (ret);
+		return (EXIT_FAILURE);
+	signal(SIGINT, handle_signal);
+	if (create_threads(env, &th_pa, &th_mlx) == EXIT_SUCCESS)
+		error = close_threads(&th_pa, &th_mlx);
+	else
+		error = 1;
+	free(env);
+	return (error);
 }

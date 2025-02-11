@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx_utils.h"
 
 /*
 	Function to init image with given size, will init it's metadata too.
