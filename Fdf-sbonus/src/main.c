@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:19:48 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/11 17:56:30 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/13 00:45:58 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static t_env	*init_env(void)
 		return (NULL);
 	env->buffer = NULL;
 	env->buf_len = 0;
-	pthread_mutex_init(&env->buffer_mutex, NULL);
 	return (env);
 }
 

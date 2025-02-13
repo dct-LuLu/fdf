@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/11 16:59:20 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/13 00:46:13 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_env
 	t_pa			*pa;
 	int16_t			*buffer;
 	size_t			buf_len;
-	pthread_mutex_t	buffer_mutex;
 }	t_env;
 
 int		*init_ret(void);

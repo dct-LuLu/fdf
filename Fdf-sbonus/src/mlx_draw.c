@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:39:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/11 18:02:12 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/02/13 00:46:02 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static void	draw_osci(t_env *env)
 
 	i = 0;
 	mlx = env->mlx;
-	pthread_mutex_lock(&env->buffer_mutex);
 	if (DEBUG)
 		draw_debug(env);
 	if (RAINBOW && ((mlx->tick % 10) == 0))
@@ -73,7 +72,6 @@ static void	draw_osci(t_env *env)
 		ft_mlx_pixel_put(&env->mlx->img, pos, env->mlx->color);
 		i += 2;
 	}
-	pthread_mutex_unlock(&env->buffer_mutex);
 }
 
 /*
