@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 22:13:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/13 00:55:45 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/13 02:01:40 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,5 @@ void	*mlx_thread(void *arg)
 	mlx_loop(env->mlx->mlx);
 	kill_mlx(env->mlx);
 	*ret = 0;
-	ft_printf("aaaaaaaaaa\n\n");
 	return (ret);
 }
