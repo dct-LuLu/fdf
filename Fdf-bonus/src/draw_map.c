@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:10:14 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 17:53:39 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/14 00:10:31 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 	{
 		p1 = map.proj(arrange(get_point_cords(map, x + 1, y), map));
 		center(&p1, map);
-		if (map.map[y][x].color && map.map[y][x + 1].color)
+		if (map.map[y][x].color)
 			ft_mlx_line_put(&img, p, p1, map.map[y][x].color);
 		else
 			ft_mlx_line_put(&img, p, p1, 0xFF0000);
@@ -37,7 +37,7 @@ void	draw_segments(t_img img, t_map map, size_t x, size_t y)
 	{
 		p2 = map.proj(arrange(get_point_cords(map, x, y + 1), map));
 		center(&p2, map);
-		if (map.map[y][x].color && map.map[y + 1][x].color)
+		if (map.map[y][x].color)
 			ft_mlx_line_put(&img, p, p2, map.map[y][x].color);
 		else
 			ft_mlx_line_put(&img, p, p2, 0xFF0000);

@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 02:04:52 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/01/10 09:58:01 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/16 21:41:27 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	count_tokens(const char *str, char sep)
 	i = 0;
 	count = 0;
 	in = false;
-	while (str && str[i])
+	while (str && str[i] && str[i] != '\n')
 	{
 		if (!in && (str[i] != sep))
 		{

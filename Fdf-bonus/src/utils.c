@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 02:17:22 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/13 02:48:32 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/14 00:23:33 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ void	set_arrange(t_map *map)
 		map->space = (WIDTH - (WIDTH / 3)) / map->width;
 		if ((map->max - map->min) < 20)
 			map->zfac = 2;
-		else
+		else if ((map->max - map->min) < 80)
 			map->zfac = 1;
+		else
+			map->zfac = 0.2;
 	}
 	map_center = map->proj(new_vec3(map->width * map->space,
 				map->height * map->space, 0));
@@ -54,48 +56,27 @@ void	set_arrange(t_map *map)
 	map->offset.y = (HEIGHT / 2) - (map_center.y / 2) + map->pos.y;
 }
 
-t_vec3 arrange(t_vec3 p, t_map map)
-{
-    float	radians;
-    float	centerx;
-	float	centery;
-
-	p.x *= map.space;
-    p.y *= map.space;
-    p.z = (int)(p.z * map.zfac);
-	
-	centerx = map.width / 2;
-	centery = map.height / 2;
-    // Translate point to origin
-    p.x -= centerx;
-    p.y -= centery;
-
-    // Convert angle to radians
-    radians = map.angle * (M_PI / 180.0);
-
-    // Apply rotation
-    float newX = p.x * cos(radians) - p.y * sin(radians);
-    float newY = p.x * sin(radians) + p.y * cos(radians);
-
-    // Translate point back
-    p.x = (int)(newX + centerx);
-    p.y = (int)(newY + centery);
-    return p;
-}
-
 /*
 	Function that applies the multiplying factor to the point cords
 */
-t_vec3	aarrange(t_vec3 p, t_map map)
+t_vec3	arrange(t_vec3 p, t_map map)
 {
 	float	radians;
+	float	x;
+	float	y;
 
 	radians = map.angle * (M_PI / 180.0);
-	p.x = (int)(p.x * cos(radians) - p.y * sin(radians));
-	p.y = (int)(p.x * sin(radians) + p.y * cos(radians));
-	p.x *= map.space;
-	p.y *= map.space;
-	p.z = (int)(p.z * map.zfac);
+	p.x -= map.width / 2;
+	p.y -= map.height / 2;
+	x = (p.x * cos(radians) - p.y * sin(radians));
+	y = (p.x * sin(radians) + p.y * cos(radians));
+	x += map.width / 2;
+	y += map.height / 2;
+	x *= map.space;
+	y *= map.space;
+	p.x = x;
+	p.y = y;
+	p.z = p.z * map.zfac;
 	return (p);
 }
 

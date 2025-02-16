@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:32:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/13 02:00:55 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/13 23:40:00 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	kill_mlx(t_mlx *mlx)
 */
 int	on_keypress(int keysym, t_mlx *mlx)
 {
-	if (keysym == 65307)
+	if (keysym == XK_Escape)
 		return (mlx_loop_end(mlx->mlx));
 	return (0);
 }

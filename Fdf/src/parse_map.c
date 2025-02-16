@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 04:13:28 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 18:22:42 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/16 21:46:33 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,17 @@ t_map	init_map(char *file)
 	fd = check_open(file);
 	map.width = get_map_width(fd);
 	if (!map.width)
+	{
+		ft_dprintf(STDERR_FILENO, "Invalid map\n");
 		exit(1);
+	}
 	fd = check_open(file);
 	map.height = get_map_height(fd);
 	if (!map.height)
+	{
+		ft_dprintf(STDERR_FILENO, "Invalid map\n");
 		exit(1);
+	}
 	fd = check_open(file);
 	populate_map(fd, &map);
 	set_min_max_map(&map);

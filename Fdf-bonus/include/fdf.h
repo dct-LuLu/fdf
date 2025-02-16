@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 01:04:16 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/13 02:53:28 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/14 00:12:28 by jaubry--         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_map
 	t_vec2	offset;
 	t_vec2	pos;
 	int		angle;
-	int		space;
+	float	space;
 	float	zfac;
 	int		min;
 	int		max;

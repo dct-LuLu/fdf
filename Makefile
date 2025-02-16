@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 15:56:40 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/06 23:53:33 by jaubry--         ###   ########lyon.fr    #
+#    Updated: 2025/02/16 21:15:04 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ WIDTH		= 1000
 HEIGHT		= 1000
 DEBUG		= 0
 
-CC			= cc
+CC			= cc -g3
 CFLAGS		= -Wall -Wextra -Werror
 CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) -D DEBUG=$(DEBUG)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
@@ -101,21 +101,14 @@ clean:
 fclean:
 	@echo -e "$(RED)Cleaning $(UNDERLINE)$(MLXDIR)$(RESET)$(RED) library$(RESET)"
 	@$(MAKE) -s -C $(MLXDIR) clean
-	@$(MAKE) -s -C $(MLXDIR)-edit clean
 	@$(MAKE) -s -C $(LIBFTDIR) fclean
 	@echo -e "$(RED)Cleaning temporary files from $(UNDERLINE)$(OBJDIR)$(RESET)$(RED) and $(UNDERLINE)$(DEPDIR)$(RESET)"
 	@rm -rf $(OBJDIR) $(DEPDIR)
 	@echo -e "$(RED)Cleaning binaries $(addsuffix $(RESET),$(addprefix $(RED)$(UNDERLINE)./,$(BINARIES)))"
 	@rm -f $(BINARIES)
+	@$(MAKE) -s -C $(MLXDIR)-edit clean
 
 re: fclean all
-
-debug:
-	@echo -e "$(YELLOW)$(BOLD)⚠ Building in debug mode...$(RESET)"
-	@$(MAKE) -s -C $(LIBFTDIR) debug
-	@$(MAKE) -s CC="cc -g -D DEBUG=1 -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)" -B $(OBJS)
-	@$(MAKE) -s CC="cc -g -D DEBUG=1 -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT)" $(NAME)
-	@echo -e "$(YELLOW)$(BOLD)✓ Debug build complete$(RESET)"
 
 help:
 	@echo "Available targets:"
@@ -127,5 +120,5 @@ help:
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re debug help
+.PHONY: all clean fclean re help
 

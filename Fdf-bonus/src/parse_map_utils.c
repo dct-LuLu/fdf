@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 22:40:19 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/02/06 17:33:54 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/02/16 21:47:17 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ size_t	get_map_width(int fd)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
+		if ((int)nb_count != count_tokens(line, ' '))
+			nb_count = 0;
 	}
 	return (free(line), close(fd), nb_count);
 }

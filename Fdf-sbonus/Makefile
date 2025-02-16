@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/17 13:56:12 by jaubry--          #+#    #+#              #
-#    Updated: 2025/02/11 16:52:26 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/02/14 00:53:18 by jaubry--         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,20 +45,19 @@ HEIGHT		= 1000
 GLASS		= 0
 DEBUG		= 0
 RAINBOW		= 0
+HUE_SPEED	= 1
 
 CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror -D_REENTRANT -Ofast
 CFLAGS		:= $(CFLAGS) -D WIDTH=$(WIDTH) -D HEIGHT=$(HEIGHT) \
-			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS) -D RAINBOW=$(RAINBOW)
+			   -D DEBUG=$(DEBUG) -D GLASS=$(GLASS) -D RAINBOW=$(RAINBOW) \
+			   -D HUE_SPEED=$(HUE_SPEED)
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
-IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR) \
-			  -I$(PAINSTALL)/include -I/usr/include/pipewire-0.3 \
-			  -I/usr/include/spa-0.2 
+IFLAGS		= -I$(INCDIR) -I$(LIBFTDIR)/include -I$(MLXDIR)
 LFLAGS		= -L$(MLXDIR) -L$(LIBFTDIR) \
 			  -L$(HOME)/.local/lib -lXext -lX11 -lXrender -lm -lmlx -lft -lrt \
-			  -lasound -pthread -lpipewire-0.3 -lpulse \
-			  -lpulse-simple -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
+			  -lasound -pthread -lpulse -Wl,-rpath=$(realpath $(PAINSTALL)/lib)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
 
 # VPATH
